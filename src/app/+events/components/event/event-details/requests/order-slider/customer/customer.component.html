@@ -1,0 +1,12 @@
+
+    <div class="d-flex">
+            <div class="avatar">
+                <img [src]="request?.createdBy?.imageUrl | secure | async" default-image style="height: 75px;width: 75px;" alt="user-img" class="img-thumbnail rounded-circle" />
+            </div>
+        <div class="px-2 pt-2">
+            <p class="text-dark" [ngbTooltip]="request?.createdBy?.name">{{request?.createdBy?.name | truncate:30:'...'}}</p>
+            <p><a class="text-info " href="mailto:{{request?.createdBy?.email}}">{{request?.createdBy?.email}}</a></p>
+            <p class="text-dark">+{{request?.userPhoneNumber?.split('-')[0]}}{{request?.userPhoneNumber?.split('-')[1]}}</p>
+        </div>
+    </div>
+

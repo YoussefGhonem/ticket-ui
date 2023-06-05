@@ -1,0 +1,101 @@
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header " [formGroup]="form">
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex justify-content-start">
+                        <h4 class="m-auto">Profits </h4>
+
+                        <div class="dropdown card-header-dropdown" ngbDropdown style="    width: 300px;"
+                            style="margin-left: 2%;margin-right: 2%; width: 300px;">
+                            <ng-select (keyup)="onSearchEventChange($event)" [items]="events" bindLabel="name"
+                                bindValue="id" formControlName="eventId"
+                                placeholder="All Events &nbsp; &nbsp; &nbsp; &nbsp;">
+                                <ng-template ng-option-tmp let-item="item" let-index="index">
+                                    <b>{{item.name}} &nbsp; &nbsp; </b>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <div class="dropdown card-header-dropdown" ngbDropdown style="width: 300px;">
+                            <ng-select (keyup)="onSearchTicketTypeChange($event)" [disabled]="true"
+                                [items]="ticketTypes" bindLabel="title" bindValue="id" formControlName="ticketTypeId"
+                                placeholder="All Ticket Types &nbsp; &nbsp; &nbsp; &nbsp; ">
+                                <ng-template ng-option-tmp let-item="item" let-index="index">
+                                    <b>{{item.title}} &nbsp; &nbsp;</b>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="border-0 align-items-center d-flex">
+                            <div class="d-flex gap-1">
+
+                                <button title="Weekly" (click)="onFrequencyChange(frequencyEnum.Week)" type="button"
+                                    class="btn btn-soft-success btn-sm">
+                                    W
+                                </button>
+                                <button title="Monthly" (click)="onFrequencyChange(frequencyEnum.Month)" type="button"
+                                    class="btn btn-soft-success btn-sm">
+                                    M
+                                </button>
+                                <button title="Quarter" (click)="onFrequencyChange(frequencyEnum.Quarter)" type="button"
+                                    class="btn btn-soft-success btn-sm">
+                                    Q
+                                </button>
+                                <div class="select-dropdown">
+                                    <select formControlName="year">
+                                        <option selected hidden [value]="null">Y</option>
+                                        <option *ngFor="let item of years" value="{{item}}">{{item}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-header p-0 border-0 bg-soft-light">
+                <div class="row g-0 text-center">
+                    <div class="col-6 col-sm-3">
+                        <div class="p-3 border border-dashed border-start-0">
+                            <h5 class="mb-1">
+                                <span> {{data?.totalProfits |priceWithSgin}}</span>
+                            </h5>
+                            <p class="text-muted mb-0"> Profits</p>
+                        </div>
+                    </div><!--end col-->
+                    <div class="col-6 col-sm-3">
+                        <div class="p-3 border border-dashed border-start-0">
+                            <h5 class="mb-1"><span>
+                                    {{form.controls['eventId'].value != null ? 1 :data?.totalEvents }}</span>
+                            </h5>
+                            <p class="text-muted mb-0">Events </p>
+                        </div>
+                    </div><!--end col-->
+                    <div class="col-6 col-sm-3">
+                        <div class="p-3 border border-dashed border-start-0">
+                            <h5 class="mb-1"><span>{{data?.totalRequests |numberWithSgin}}</span></h5>
+                            <p class="text-muted mb-0">Requests</p>
+                        </div>
+                    </div><!--end col-->
+                    <div class="col-6 col-sm-3">
+                        <div class="p-3 border border-dashed border-start-0 border-end-0">
+                            <h5 class="mb-1 text-success"><span>{{data?.totalOrders|numberWithSgin}}</span></h5>
+                            <p class="text-muted mb-0">Orders</p>
+                        </div>
+                    </div><!--end col-->
+                </div>
+            </div><!-- end card header -->
+            <div class="card-body p-0 pb-2">
+                <div class="mb-n3" *ngIf="isShow">
+                    <apx-chart [series]="OverviewChart.series" [chart]="OverviewChart.chart"
+                        [stroke]="OverviewChart.stroke" [fill]="OverviewChart.fill" [markers]="OverviewChart.markers"
+                        [xaxis]="OverviewChart.xaxis" [grid]="OverviewChart.grid" [legend]="OverviewChart.legend"
+                        [plotOptions]="OverviewChart.plotOptions" [colors]="OverviewChart.colors"
+                        [tooltip]="OverviewChart.tooltip"></apx-chart>
+                </div>
+            </div><!-- end card body -->
+        </div><!-- end card -->
+    </div><!-- end col -->
+</div><!-- end row -->

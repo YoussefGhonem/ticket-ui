@@ -1,0 +1,162 @@
+<ng-container *ngIf="hasPermission;else unauthorized;">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card mt-n4 mx-n4">
+        <div class="bg-soft-{{getBackGroundColor(eventBasicInfo?.status)}}">
+          <div class="card-body pb-0 px-4">
+            <app-event-details-basic-info [eventBasicInfo]="eventBasicInfo" (loadDate)="loadEventBasicInfo()"
+              (loadActivities)="loadActivitiesFirstTime()">
+            </app-event-details-basic-info>
+            <ul ngbNav #customNav="ngbNav" [(activeId)]="activeId" class="nav nav-tabs-custom border-bottom-0"
+              role="tablist">
+
+              <li (click)="getDetails(1)" [ngbNavItem]="1" class="nav-item">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Overview
+                </a>
+                <ng-template ngbNavContent>
+                  <app-event-overview [eventBasicInfo]="eventBasicInfo"
+                    (loadActivities)="currentPage = 1;loadActivitiesFirstTime()"></app-event-overview>
+                </ng-template>
+              </li>
+
+              <li (click)="getDetails(2)" [ngbNavItem]="2" class="nav-item">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Terms and Conditions
+                </a>
+                <ng-template ngbNavContent>
+                  <app-event-terms-and-conditions (loadEvent)="loadEventBasicInfo()"
+                    [eventAllowedAction]="eventBasicInfo?.allowedActions"
+                    (loadActivities)="currentPage = 1;loadActivitiesFirstTime()">
+                  </app-event-terms-and-conditions>
+                </ng-template>
+              </li>
+
+              <li (click)="getDetails(3)" [ngbNavItem]="3" class="nav-item"
+                *ngxPermissionsOnly="[vendorAdminRole, vendorRole, superAdminRole, localAdminRole]">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Members
+                </a>
+                <ng-template ngbNavContent>
+                  <app-event-committee-members [allowedAction]="eventBasicInfo?.allowedActions"
+                    (loadActivities)="currentPage = 1;loadActivitiesFirstTime()">
+                  </app-event-committee-members>
+                </ng-template>
+              </li>
+
+              <li (click)="getDetails(4)" [ngbNavItem]="4" class="nav-item">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Tickets
+                </a>
+                <ng-template ngbNavContent>
+                  <app-event-tickets (loadEvent)="loadEventBasicInfo()" [eventBasicInfo]="eventBasicInfo"
+                    (loadActivities)="currentPage = 1;loadActivitiesFirstTime()"
+                    [eventAllowedActions]="eventBasicInfo?.allowedActions">
+                  </app-event-tickets>
+                </ng-template>
+              </li>
+
+              <li (click)="getDetails(5)" [ngbNavItem]="5" class="nav-item">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Questions
+                </a>
+                <ng-template ngbNavContent>
+                  <app-event-questions [eventBasicInfo]="eventBasicInfo"
+                    [eventAllowedAction]="eventBasicInfo?.allowedActions"
+                    (loadActivities)="currentPage = 1;loadActivitiesFirstTime()"></app-event-questions>
+                </ng-template>
+              </li>
+
+              <li (click)="getDetails(6)" [ngbNavItem]="6" class="nav-item" *ngIf="!isDraft">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Requests
+                </a>
+                <ng-template ngbNavContent>
+                  <app-event-requests [eventBasicInfo]="eventBasicInfo"></app-event-requests>
+                </ng-template>
+              </li>
+
+              <li (click)="getDetails(7)" [ngbNavItem]="7" class="nav-item" *ngIf="!isDraft">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Orders
+                </a>
+                <ng-template ngbNavContent>
+                  <app-event-orders></app-event-orders>
+                </ng-template>
+              </li>
+
+              <li (click)="getDetails(9)" [ngbNavItem]="9" class="nav-item">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Audits
+                </a>
+                <ng-template ngbNavContent>
+                  <app-event-activities [eventActivities]="eventActivities" [currentPage]="currentPage"
+                    (firstTime)="loadActivitiesFirstTime($event)"
+                    (loadActivities)="loadActivities($event)"></app-event-activities>
+                </ng-template>
+              </li>
+
+            </ul>
+          </div>
+          <!-- end card body -->
+        </div>
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col -->
+  </div>
+  <!-- end row -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="tab-content text-muted">
+        <div [ngbNavOutlet]="customNav"></div>
+      </div>
+    </div>
+    <!-- end col -->
+  </div>
+  <!-- end row -->
+</ng-container>
+
+
+
+<ng-template #unauthorized>
+  <div class="auth-page-wrapper pt-5">
+    <!-- auth page bg -->
+    <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
+
+      <div class="shape">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1440 120">
+          <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- auth page content -->
+    <div class="auth-page-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="text-center pt-4">
+              <div class="">
+                <img src="assets/images/error.svg" alt="" class="error-basic-img move-animation">
+              </div>
+              <div class="mt-n4">
+                <h1 class="display-1 fw-medium">401</h1>
+                <h3 class="text-uppercase">Unauthorized!!</h3>
+                <p class="text-muted mb-4">You don't have the required permission</p>
+                <a routerLink="/events" class="btn btn-success"><i class="mdi mdi-home me-1"></i>Back to Events</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end row -->
+
+      </div>
+      <!-- end container -->
+    </div>
+    <!-- end auth page content -->
+
+  </div>
+  <!-- end auth-page-wrapper -->
+
+</ng-template>

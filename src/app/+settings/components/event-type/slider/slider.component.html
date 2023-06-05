@@ -1,0 +1,57 @@
+<!-- Theme Settings -->
+
+<ngx-simplebar class="h-100" style="padding-bottom: 50px;">
+    <div class="p-2">
+
+        <div class="row">
+            <div class="col-12 my-2">
+                <slider-header [eventType]="eventType"></slider-header>
+            </div>
+            <div class="col-12">
+                <ul ngbNav #customNav="ngbNav" [activeId]="1"
+                    class="nav nav-tabs nav-tabs-custom border-bottom-0 nav-success mb-3">
+
+                    <li [ngbNavItem]="1" class="nav-item">
+                        <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                            Audits
+                        </a>
+
+                        <ng-template ngbNavContent>
+                            <audits-tab [eventTypeAudits]="eventTypeAudits"
+                                (loadFirst)="loadEventTypeAuditsForFirstTime($event)"
+                                (load)="loadEventTypeAudits($event)"></audits-tab>
+                        </ng-template>
+                    </li>
+
+                </ul>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="tab-content text-muted">
+                            <div [ngbNavOutlet]="customNav"></div>
+                        </div>
+                    </div>
+                    <!-- end col -->
+                </div>
+                <!-- end row -->
+            </div>
+
+        </div>
+
+    </div>
+</ngx-simplebar>
+<div *ngIf="activeId == 1" class="col-12 my-2" style="position:absolute; bottom: 10px; right: 10px;">
+    <div class="hstack gap-2 d-flex flex-row-reverse mt-4">
+        <a href="javascript:void(0);" class="btn btn-primary mx-1" (click)="edit(eventType)"
+            *ngIf="hasAllowedAction(eventType, allowedAction.Edit)"><i class="ri-edit-2-fill align-bottom me-1"></i> Edit</a>
+
+        <a href="javascript:void(0);" class="btn btn-warning mx-1" (click)="deactivate(eventType)"
+        *ngIf="hasAllowedAction(eventType, allowedAction.Deactivate)"><i class="ri-close-circle-line align-bottom me-1"></i>
+            Deactivate</a>
+        <a href="javascript:void(0);" class="btn btn-success mx-1" (click)="activate(eventType)"
+        *ngIf="hasAllowedAction(eventType, allowedAction.Activate)"><i class="ri-check-double-fill align-bottom me-1"></i>
+            Activate</a>
+        <a href="javascript:void(0);" class="btn btn-danger mx-1" (click)="delete(eventType)"
+        *ngIf="hasAllowedAction(eventType, allowedAction.Delete)"><i class="ri-delete-bin-fill align-bottom me-1"></i>
+            Remove</a>
+    </div>
+</div>

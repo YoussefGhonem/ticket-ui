@@ -1,0 +1,14 @@
+<ng-container #content role="document">
+  <div class="modal-header bg-light p-3">
+    <h5 class="modal-title">
+      {{name}}
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+            (click)="modalService.close()"></button>
+  </div>
+
+  <img class="image" [src]="url" alt="img" *ngIf="type == fileTypeEnum.Image">
+  <video class="video" [src]="url" controls *ngIf="type == fileTypeEnum.Video"></video>
+  <audio class="audio" [src]="url" controls *ngIf="type == fileTypeEnum.Audio"></audio>
+
+</ng-container>

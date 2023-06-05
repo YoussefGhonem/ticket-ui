@@ -1,0 +1,74 @@
+<!-- Order Create Model -->
+<ng-container #content role="document">
+  <div class="modal-header bg-light p-3">
+    <h5 class="modal-title" id="addModal"> Edit Complementary Ticket</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+      (click)="modalService.close()"></button>
+  </div>
+  <form [formGroup]="form">
+    <div class="modal-body">
+      <div class="row gy-4 mb-3">
+        <div class="col-md-12 form-group">
+          <label for="title-field" class="form-label">Title</label>
+          <input type="text" id="title-field" disabled class="form-control" value="Complementary Ticket" />
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="amount-field" [redStar]="form.get('quantity')" class="form-label">Quantity</label>
+          <input [formControlValidator]="form.get('quantity')" type="text" id="customername-field" class="form-control"
+            placeholder="Enter First Name" formControlName="quantity" />
+          <arv-validation-messages for="quantity">
+          </arv-validation-messages>
+
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="amount-field" class="form-label">Limit Quantity Per
+            Purchase</label>
+          <input type="number" disabled class="form-control" value="1" />
+        </div>
+        <div class="col-md-12">
+          <label class="form-label">Customers</label>
+
+          <div class="input-group">
+            <input type="text" class="form-control" (keyup.enter)="addEmail()" formControlName="email"
+              placeholder="Enter an Email" [formControlValidator]="form.get('email')">
+            <button [disabled]="form?.get('email')?.errors && ( this.complementary?.clientsEmails?.length == this.form?.get('quantity').value
+     || this.form?.get('quantity').value === null)" (click)="addEmail()" class="btn btn-outline-primary"
+              type="button">Add
+            </button>
+          </div>
+          <arv-validation-messages for="email">
+          </arv-validation-messages>
+        </div>
+        <div class="col-md-12" *ngIf="complementary?.clientsEmails?.length > 0">
+
+          <ngx-simplebar class="email-list">
+            <table class="table table-striped table-sm">
+              <tbody>
+                <tr *ngFor="let item of complementary?.clientsEmails; let i = index">
+                  <td>
+                    <i class="ri-mail-line me-2 align-middle text-muted fs-16"></i>{{complementary?.clientsEmails[complementary?.clientsEmails.length - 1 - i]}}
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-soft-danger btn-icon btn-sm float-end" (click)="deleteEmail(complementary?.clientsEmails.length - 1 - i)"
+                      style="margin-left: 5px;"><i class=" ri-delete-bin-6-line"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </ngx-simplebar>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modalService.close()">Cancel
+        </button>
+        <button [disabled]="form.invalid || form.pristine || validValues()" type="button" (click)="submit()" class="btn btn-success"
+          id="add-btn">Save
+        </button>
+
+      </div>
+    </div>
+  </form>
+</ng-container>
+<!--End Modal -->

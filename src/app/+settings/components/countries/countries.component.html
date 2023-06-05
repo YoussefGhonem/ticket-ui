@@ -1,0 +1,75 @@
+<app-breadcrumbs title="Countries" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card" id="orderList">
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <form [formGroup]="form">
+          <div class="row g-3">
+            <div class="col-xxl-5 col-sm-6">
+              <div class="search-box">
+                <input type="text" class="form-control" formControlName="name" placeholder="Search for name">
+                <i class="ri-search-line search-icon"></i>
+                <div class="search-button">
+
+                  <i *ngIf="showDeleteIcon()" (click)="clearSearchBar()"
+                    class="ri-close-line custom-delete-search-icon d-flex flex-row-reverse"> </i>
+                </div>
+              </div>
+            </div>
+            <div class="col-xxl-2 col-sm-4">
+              <div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="card-body pt-0 mt-3">
+        <p-table [value]="tableService.data$ | async" [totalRecords]="tableService.total$ | async"
+          (onLazyLoad)="tableService.onLazyLoad($event)" [columns]="tableService.selectedColumns"
+          [lazy]="tableService.options.lazy" [rows]="tableService.options.rows"
+          [paginator]="tableService.options.paginator"
+          [showCurrentPageReport]="tableService.options.showCurrentPageReport"
+          [responsiveLayout]="tableService.options.responsiveLayout"
+          [currentPageReportTemplate]="tableService.options.currentPageReportTemplate"
+          [rowsPerPageOptions]="tableService.options.rowsPerPageOptions" [styleClass]="tableService.options.styleClass">
+
+          <ng-template pTemplate="caption">
+            <table-header-select class="custom-header" [columns]="columns"
+              [selectedColumns]="tableService.selectedColumns" (onChanges)="tableService.selectedColumns = $event">
+            </table-header-select>
+          </ng-template>
+
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <ng-container *ngFor="let col of columns">
+                <th class="custom-col" [pSortableColumn]="col.field" *ngIf="col.allowSorting">
+                  {{col.title}}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+                <th class="custom-col" *ngIf="!col.allowSorting">
+                  {{col.title}}
+                </th>
+              </ng-container>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-row let-columns="columns">
+            <tr>
+              <td *ngFor="let col of columns">
+                <table-column *ngIf="col.type !== 'custom'" [dataItem]="row" [option]="col"></table-column>
+
+                <ng-container *ngIf="col.type === 'custom'">
+
+                  <span *ngIf="col.field === 'isActive'" activeStatusBadge [value]="row?.isActive"></span>
+
+                </ng-container>
+
+              </td>
+            </tr>
+          </ng-template>
+
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>

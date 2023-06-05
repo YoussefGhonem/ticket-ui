@@ -1,0 +1,13 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Event List" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<event-filters [form]="form" (notify)="loadEvents()" [events]="events"></event-filters>
+
+<events-card [events]="events" (notify)="loadEvents()"></events-card>
+
+<div style="margin-bottom: 1%" *ngIf="events?.length > 0">
+  <app-pagination (pageChange)="pageChange($event)" [pageNumber]="form.getRawValue().pageNumber"
+    [pageSize]="form.getRawValue().pageSize" [total]="total">
+  </app-pagination>
+</div>

@@ -1,0 +1,15 @@
+agm-map {
+  height: 300px !important;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+ng-select {
+  width: 100%;
+}
+
+::ng-deep .ng-select.ng-select-single .ng-select-container {
+  height: 100%;
+  border-radius: 5px 5px 5px 5px;
+}

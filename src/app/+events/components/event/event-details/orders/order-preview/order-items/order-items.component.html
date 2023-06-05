@@ -1,0 +1,49 @@
+<div class="table-responsive">
+    <table class="table table-borderless text-center table-nowrap align-middle mb-0">
+        <thead>
+            <tr class="table-active">
+                <th scope="col" class="text-start">Ticket Type</th>
+                <th scope="col">Request Ref</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Ticket Price</th>
+                <th scope="col" class="text-end">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody id="products-list">
+            <tr *ngFor="let order of orderItems; let i=index;" style="border-bottom: 1px solid rgb(151, 149, 149);">
+                <td scope="row" class="text-start"> <span [ngbTooltip]="order?.ticketTypeTitle">{{order?.ticketTypeTitle | truncate:15:'...'}}</span>
+                <th class="text-center" style="position: relative;"> 
+                    <div (mouseover)="selectOrder(order)" (mouseout)="selectOrder(order)">
+                        <span *ngIf="!order?.requestReference">-</span>
+                        <a *ngIf="order?.requestReference" href="javascript:void(0)" (click)="openOrderSlider(filtetcontent, order?.requestId)" style="color:#4bbbec;"><u>{{order?.requestReference || '-'}}</u></a>
+                        <i *ngIf="order?.requestReference" style="position: absolute; top: 13%; right: 10%;font-weight: 400;" 
+                                    class="ri-information-line fs-20" [ngbTooltip]="tipContent"></i>
+                    </div>
+                </th>
+                <td class="text-center"> {{order?.quantity}}</td>
+                <td class="text-center">{{order?.ticketPrice | price}}</td>
+                <td class="text-end">{{order?.subtotal | price}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <!--end table-->
+</div>
+
+<ng-template #filtetcontent let-offcanvas>
+    <div class="d-flex align-items-center bg-light bg-gradient p-3 offcanvas-header">
+      <h5 class="m-0 me-2 text-dark">{{chosenRequest?.reference}}</h5>
+      <button type="button" class="btn-close btn-close-dark ms-auto " data-bs-dismiss="offcanvas" aria-label="Close"
+        (click)="offcanvas.dismiss('Cross click')"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+      <order-slider [request]="chosenRequest"></order-slider>
+    </div>
+  </ng-template>
+
+
+  <ng-template #tipContent>
+<div class="text-start">
+    <span><b class="fs-11">Approved By: {{selectedOrderItem?.approvedBy}}</b></span><br>
+    <span><b class="fs-11">Approved Date: {{selectedOrderItem?.approvedDate | datetime}}</b></span>
+</div>
+  </ng-template>

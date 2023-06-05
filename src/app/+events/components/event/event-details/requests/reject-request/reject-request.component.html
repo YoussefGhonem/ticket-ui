@@ -1,0 +1,45 @@
+<section>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="m-0 me-2 text-dark">Reject</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn-close"
+          (click)="modalService.close()"></button>
+      </div>
+      <div class="modal-body">
+  
+        <ng-container *ngIf="reason">
+          <ng-container *ngTemplateOutlet="rejectRequestTemp"></ng-container>
+        </ng-container>
+  
+        <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+          <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal" (click)="modalService.close()">Cancel
+          </button>
+          <button [disabled]="NotValid" type="button" class="btn w-sm btn-danger" id="delete-product" (click)="Reject()">Reject
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  
+  
+  <ng-template #rejectRequestTemp>
+    <div class="mt-2 text-center">
+      <!-- Info Alert -->
+      <div class="alert alert-info alert-top-border alert-dismissible fade show" role="alert">
+        <i class="ri-information-line me-3 align-middle fs-16 text-info"></i>
+        Please, provide a reason for Rejecting {{requests?.length == 1 ? 'this request' : 'these requests'}}.
+      </div>
+    </div>
+  
+    <form [formGroup]="form">
+      <div class="form-group">
+        <label class="form-label" [redStar]="form.get('reason')">Reason</label>
+        <textarea rows="6" class="form-control" formControlName="reason" placeholder="Enter Reason"
+          [formControlValidator]="form.get('reason')"></textarea>
+        <arv-validation-messages for="reason"></arv-validation-messages>
+      </div>
+    </form>
+  
+  </ng-template>
+  

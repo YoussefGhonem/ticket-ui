@@ -1,0 +1,121 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card-header  border-0">
+      <div class="d-flex align-items-center">
+        <div class="card-title mb-0 flex-grow-1">
+          <div class="row" [formGroup]="form">
+            <div class="col-lg-8 col-sm-12">
+              <div class="search-box">
+                <input type="text" formControlName="searchWord" class="form-control "
+                  placeholder="Search by name or email" id="custom-control">
+                <i class="ri-search-line search-icon"></i>
+                <div class="search-button" (click)="toggleSearch()">
+                  <i *ngIf="!dropdownOpen" class="ri-equalizer-line custom-search-icon d-flex flex-row-reverse text-dark"><span
+                      style="padding-bottom: 2px; padding-right: 3px;font-family: sans-serif;font-size: medium;">Filters</span>
+                  </i>
+                  <i *ngIf="dropdownOpen" [ngbTooltip]="'Close'"
+                    class="ri-equalizer-line custom-search-icon d-flex flex-row-reverse text-dark"></i>
+                </div>
+
+                <i *ngIf="chowDeleteIcon()" (click)="clearSearchBar()"
+      class="ri-close-line custom-delete-search-icon d-flex flex-row-reverse"> </i>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-8 col-sm-12" [formGroup]="form">
+              <ul class="dropdown-list" aria-expanded="true" role="listbox" #toggle
+                [ngClass]="{'dropdown-open' : dropdownOpen}">
+                <div class="modal-body">
+                  <div class="row gy-4 mb-3">
+
+                    <div class="col-md-6 form-group">
+                      <label class="form-label">Status
+                      </label>
+                      <ng-select [clearable]="true" bindLabel="name" bindValue="id" id="eventTypeId"
+                        formControlName="isActive" placeholder="Select">
+                        <ng-option [value]="' '"> <b>All</b></ng-option>
+                        <ng-option [value]="true"> <b>Active</b></ng-option>
+                        <ng-option [value]="false"> <b>Inactive</b></ng-option>
+                      </ng-select>
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <label class="form-label" style="    margin-bottom: 20px;">
+                      </label>
+                      <ng-select [disabled]="true" [clearable]="true" bindLabel="name" bindValue="id" id="eventTypeId"
+                        formControlName="isLocked" placeholder="Select">
+                        <ng-option [value]="' '" selected> <b>All</b></ng-option>
+                        <ng-option [value]="true"> <b>Locked</b></ng-option>
+                        <ng-option [value]="false"> <b>UnLocked</b></ng-option>
+                      </ng-select>
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <label class="form-label">Created Date</label>
+                      <input [disabled]="true" class="form-control flatpickr-input" formControlName="createdDate"
+                        type="text" mwlFlatpickr data-clear [altInput]="true" [convertModelValue]="true"
+                        placeholder="Select Created Date">
+                      <i *ngIf="form.get('createdDate').value !== null" (click)="clearDate()"
+                        class="ri-close-line custom-delete-date-icon d-flex flex-row-reverse"> </i>
+                    </div>
+                    <div class="text-end">
+                      <div class="d-flex gap-1 justify-content-end">
+                        <button type="button" class="btn btn-light w-sm" (click)="clear()">Clear
+                          Filter
+                        </button>
+                        <button type="button" (click)="search()" class="btn btn-success w-sm">Search</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <div class="flex-shrink-0 hstack gap-2">
+          <ng-container
+            *ngIf="selectedRows?.length > 0 && eventAllowedAction(eventAllowedActions.EditWhenDraftOrPublished); else temp">
+            <!-- ({{selectedContactRows?.length}}) =>>>> ({{selectedUnContactRows?.length}}) -->
+            <button style="margin-left: 6px;" (click)="unassginMember()" type="button" class="btn btn-danger">
+              <i class=" ri-delete-back-2-line me-1 align-bottom"></i> Unassign ({{selectedRows?.length}})
+            </button>
+            <div ngbDropdown>
+              <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false" ngbDropdownToggle><i class="ri-edit-box-line text-muted align-bottom"></i>
+                Manage Contact
+              </button>
+              <ul *ngIf="selectedUnContactRows?.length > 0 || selectedContactRows?.length > 0" class="dropdown-menu" ngbDropdownMenu>
+                <li *ngIf="selectedUnContactRows?.length > 0" >
+                  <a class="dropdown-item cursor-pointer" (click)=" makAsContact()"> <i
+                      class=" ri-menu-add-line text-muted align-bottom"></i> Make Contact
+                    ({{selectedUnContactRows?.length}})</a>
+                </li>
+                <li *ngIf="selectedContactRows?.length > 0" >
+                  <a class="dropdown-item cursor-pointer" (click)="removeAsContact()"> <i
+                      class="ri-close-circle-line text-muted align-bottom"></i> Remove Contact
+                    ({{selectedContactRows?.length}})
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </ng-container>
+          <ng-template #temp>
+            <button *ngIf="eventAllowedAction(eventAllowedActions.EditWhenDraftOrPublished)" style="margin-left: 6px;"
+              (click)="assginMember($event)" type="button" class="btn btn-warning">
+              <i class=" ri-pencil-fill me-1 align-bottom"></i> Assign
+            </button>
+            <button *ngIf="eventAllowedAction(eventAllowedActions.EditWhenDraftOrPublished)" style="margin-left: 6px;"
+              (click)="create($event)" type="button" class="btn btn-success">
+              <i class="ri-add-circle-line align-bottom"></i> Create
+            </button>
+            <button [disabled]="disabledExport" style="margin-left: 6px;" type="button" class="btn btn-info"
+              (click)="export()">
+              <i class="ri-file-excel-2-line me-1 align-bottom"></i>
+              Export
+            </button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<!-- Order Create Model -->
+<ng-container #content role="document">
+  <div class="modal-header bg-light p-3">
+    <h5 class="modal-title">{{title}}
+      <button id="download" type="button" (click)="downloadPdf()" class="btn btn-soft-dark" [ngbTooltip]="'Download'"
+      ><i class=" ri-download-2-line fs-18"></i></button>
+
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+      (click)="modalService.close()"></button>
+  </div>
+
+    <div class="text-center mb-3">
+    <div id="outerContainer">
+      <div class="pdf-container">
+        <pdf-viewer [src]="src" [rotation]="0" [original-size]="false" [show-all]="true" [fit-to-page]="false"
+          [zoom]="0.95" [zoom-scale]="'page-width'" [stick-to-page]="false" [render-text]="true"
+          [external-link-target]="'blank'" [autoresize]="true" [show-borders]="false"
+          style="width: 100%; height: 450px;"></pdf-viewer>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="card border">
+    <div class="card-body">
+
+      <div class="form-group">
+        <label class="form-label fs-14" [redStar]="signupForm.get('signature')">Sign and Verify</label>
+        <ng-signature-pad *ngIf="signupForm.getRawValue().signature == null" [showDoneButton]="true"
+          (done)="saveSignature($event)" (cleared)="clearSignature()" [doneButtonClass]="'btn btn-sm btn-soft-success'"
+          [clearButtonClass]="'btn btn-sm btn-light'" [doneButtonText]="'Save'" format="base64">
+        </ng-signature-pad>
+        <div *ngIf="signupForm.getRawValue().signature">
+          <img [src]="signupForm.getRawValue().signature" />
+          <button id="clear" (click)="clearSignature()" class="btn btn-sm btn-light">Clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<!--End Modal -->

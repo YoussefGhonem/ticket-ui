@@ -1,0 +1,33 @@
+<div class="table-responsive">
+    <table class="table table-borderless text-center table-nowrap align-middle mb-0">
+        <thead>
+            <tr class="table-active">
+                <th scope="col" class="text-start">Order Ref</th>
+                <th scope="col">Payment Date</th>
+                <th scope="col">Quantity</th>
+                <th scope="col" class="text-end">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody id="products-list">
+            <tr *ngFor="let order of requestOrders; let i=index;" style="border-bottom: 1px solid rgb(151, 149, 149);">
+                <th scope="row" class="text-start"><a href="javascript:void(0)" style="color:#4bbbec;" (click)="openOrderSlider(filtetcontent, order?.orderId)"><u>{{order?.reference}}</u></a></th>
+                <td class="text-center"> {{order?.orderDate | datetime}}
+                </td>
+                <td class="text-center">{{order?.quantity}}</td>
+                <td class="text-end">{{order?.totalPrice | price}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <!--end table-->
+</div>
+
+<ng-template #filtetcontent let-offcanvas>
+    <div class="d-flex align-items-center bg-light bg-gradient p-3 offcanvas-header">
+        <h5 class="m-0 me-2 text-dark">{{chosenOrder?.reference}}</h5>
+        <button type="button" class="btn-close btn-close-dark ms-auto " data-bs-dismiss="offcanvas" aria-label="Close"
+            (click)="offcanvas.dismiss('Cross click')"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <order-preview [order]="chosenOrder"></order-preview>
+    </div>
+</ng-template>

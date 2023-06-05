@@ -1,0 +1,18 @@
+<a class="accordion-button p-2 shadow-none" data-bs-toggle="collapse" href="javascript:void(0);" aria-expanded="true"
+  aria-controls="collapseOne">
+  <div class="d-flex">
+    <div class="flex-shrink-0">
+      <img [src]="activity?.createdBy?.imageUrl | secure | async" default-image alt="" class="avatar-xs rounded-circle" />
+    </div>
+    <div class="flex-grow-1 ms-3">
+      <div class="mb-2">
+        <span class="fs-14">{{activity?.createdBy?.name | truncate:30:'...'}}</span><br>
+        <span class="fs-10 text-muted">{{presentDate(activity?.createdDate)}}</span>
+      </div>
+      <small *ngIf="!activity.extraInfo.hasPopUp" class="text-muted" [innerHtml]="activity.title"></small>
+      <small *ngIf="activity.extraInfo.hasPopUp" class="text-muted">{{returnHumanized(activity.extraInfo.property)}} has changed from
+        <a href="javascript:void(0)" (click)="previewActivity(activity.extraInfo.property, activity.extraInfo.changedFrom)"> Old {{returnHumanized(activity.extraInfo.property)}}</a> to 
+        <a href="javascript:void(0)" (click)="previewActivity(activity.extraInfo.property, activity.extraInfo.changedTo)"> New {{returnHumanized(activity.extraInfo.property)}}</a></small>
+    </div>
+  </div>
+</a>

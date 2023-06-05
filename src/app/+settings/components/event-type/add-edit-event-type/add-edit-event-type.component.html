@@ -1,0 +1,39 @@
+<ng-container #content role="document">
+  <div class="modal-header bg-light p-3">
+    <h5 class="modal-title" id="addModal" *ngIf="mode == 'add'">New Event Type</h5>
+    <h5 class="modal-title" id="exampleModalLabel" *ngIf="mode == 'edit'">Edit '{{eventType.name}}'</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+      (click)="modalService.close()"></button>
+  </div>
+  <form (ngSubmit)="submit()" [formGroup]="form">
+    <div class="modal-body">
+      <div class="mb-3 form-group">
+        <label class="form-label" [redStar]="form.get('name')">Name</label>
+        <input [formControlValidator]="form.get('name')" type="text" class="form-control" placeholder="Enter Name"
+          formControlName="name" />
+        <arv-validation-messages for="name">
+        </arv-validation-messages>
+      </div>
+
+
+      <div class="mb-3 form-group">
+        <label class="form-label" [redStar]="form.get('description')">Description </label>
+        <textarea [formControlValidator]="form.get('description')" type="text" class="form-control"
+          placeholder="Enter Description" formControlName="description">
+                    </textarea>
+        <arv-validation-messages for="description">
+        </arv-validation-messages>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+        <button type="button" id="cancel" class="btn btn-light" data-bs-dismiss="modal" (click)="modalService.close()">Cancel
+        </button>
+        <button [disabled]="form.invalid" type="submit" class="btn btn-success" id="add-btn1" *ngIf="mode == 'add'">Create
+        </button>
+        <button [disabled]="form.invalid" type="submit" class="btn btn-success" id="add-btn" *ngIf="mode == 'edit'">Save
+        </button>
+      </div>
+    </div>
+  </form>
+</ng-container>

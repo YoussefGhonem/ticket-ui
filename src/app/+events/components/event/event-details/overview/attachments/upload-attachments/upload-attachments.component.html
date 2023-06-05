@@ -1,0 +1,22 @@
+<!-- Order Create Model -->
+<ng-container #content role="document">
+  <div class="modal-header bg-light p-3">
+    <h5 class="modal-title" id="addModal"> Upload Attachments</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+      (click)="modalService.close()"></button>
+  </div>
+  <form (ngSubmit)="submit()" [formGroup]="form">
+    <div class="modal-body">
+      <upload-files></upload-files>
+    </div>
+    <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modalService.close()">Cancel
+        </button>
+        <button [disabled]="form.invalid" type="submit" class="btn btn-success" id="add-btn"> Upload
+        </button>
+      </div>
+    </div>
+  </form>
+</ng-container>
+<!--End Modal -->

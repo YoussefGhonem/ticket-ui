@@ -1,0 +1,27 @@
+.card {
+  margin-bottom: 0.75rem !important;
+  margin-top: 0.75rem !important;
+}
+
+.radio {
+  margin-top: 9.1px;
+  margin-right: 5px;
+}
+
+::placeholder {
+  color: #878a99 !important;
+  opacity: 0.5;
+}
+
+.form-control {
+  border-width: 0px;
+  border-bottom-width: 0px;
+}
+
+input:focus {
+  background-color: #d8edf9;
+}
+
+.is-last {
+
+}

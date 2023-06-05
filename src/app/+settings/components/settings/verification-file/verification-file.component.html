@@ -1,0 +1,56 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title mb-0 fs-14" [redStar]="verificationFileForm.get('verificationDocument')">Verification Document
+    </h5>
+  </div>
+  <div class="card-body">
+    <div>
+      <form [formGroup]="verificationFileForm" (submit)="onFileSubmit()">
+
+        <div class="mb-3 form-group">
+          <input class="form-control" [formControlValidator]="verificationFileForm.get('verificationDocument')" #fileTag
+            id="uploadedFile" formControlName="verificationDocument" (change)="onFileChange($event, fileTag)"
+            type="file" accept=".pdf" />
+          <arv-validation-messages for="verificationDocument"></arv-validation-messages>
+          <small>Allowed extension .pdf</small>
+        </div>
+        <div class="mb-3" *ngIf="settings?.verificationDocumentUrl">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="vstack gap-2">
+                <div class="border rounded border-dashed p-2">
+                  <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 me-3">
+                      <div class="avatar-sm">
+                        <div (click)="showPdf()" class="avatar-title text-muted bg-light rounded fs-24 cursor-pointer">
+                          <i class=" ri-file-fill"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex-grow-1 overflow-hidden">
+                      <h5 (click)="showPdf()" class="fs-13 mb-1"><a href="javascript: void(0);"
+                          class="text-body text-truncate d-block">{{settings.verificationDocumentName}}</a></h5>
+                      <div>{{settings.verificationDocumentSize | fileSize }} </div>
+                    </div>
+                    <div class="flex-shrink-0 ms-2">
+                      <div class="d-flex gap-1">
+                        <button [ngbTooltip]="'Download'" type="button" class="btn btn-icon text-muted btn-sm fs-18"
+                          (click)="downloadPdf()"><i class="ri-download-2-line"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-end mb-3">
+          <button [disabled]="verificationFileForm.invalid" type="submit" class="btn btn-success w-sm">Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

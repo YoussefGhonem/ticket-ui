@@ -1,0 +1,13 @@
+::ng-deep .offcanvas.offcanvas-end{
+    width: 799px !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead>tr>th {
+    font-weight: 500 !important;
+    font-size: 15px !important;
+}
+
+:host ::ng-deep span { 
+    font-size: 15px !important; 
+    font-weight: 400 !important;
+}

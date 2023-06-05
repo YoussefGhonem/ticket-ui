@@ -1,0 +1,128 @@
+img {
+    margin-top: -22px;
+    object-fit: contain;
+    margin-right: 11px;
+    background: #efefef;
+}
+
+.custom-delete-search-icon {
+    font-size: 10px;
+    position: absolute;
+    font-size: inherit;
+    right: 97px !important;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: #878a99;
+}
+
+.custom-delete-search-icon {
+    font-size: 10px;
+    position: absolute;
+    font-size: inherit;
+    right: 97px;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: #878a99;
+}
+
+.custom-delete-date-icon {
+    font-size: 10px;
+    position: absolute;
+    font-size: inherit;
+    right: 37px;
+    top: 0;
+    height: 145%;
+    display: flex;
+    align-items: center;
+    color: #878a99;
+}
+
+.search-button {
+    text-align: center;
+    outline: none;
+    cursor: pointer;
+    border-radius: 0 10px 10px 0;
+    border-left: none;
+    background: none;
+}
+
+.custom-search-icon {
+    font-size: 14px;
+    position: absolute;
+    font-size: large;
+    right: 0px;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: 0 4px 6px 0;
+}
+
+
+.custom-sort-icon {
+    font-size: 14px;
+    font-size: 20px;
+    top: 0;
+    height: 97%;
+    display: flex;
+    align-items: center;
+    color: #878a99;
+    padding: 7px;
+    border-radius: 4px 4px 4px 4px;
+}
+
+.custom-delete-search-icon {
+    font-size: 10px;
+    position: absolute;
+    font-size: inherit;
+    right: 52px;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: #878a99;
+}
+
+.dropdown-list {
+    z-index: 1000;
+    display: none;
+    padding: 0.5rem 0;
+    margin: 0 0.83rem 0 0;
+    font-size: 0.8125rem;
+    color: #212529;
+    color: var(--vz-body-color);
+    list-style: none;
+    background-color: var(--vz-dropdown-bg);
+    background-clip: padding-box;
+    border: var(--vz-dropdown-border-width) solid var(--vz-border-color);
+    border-bottom-left-radius: 0.3rem;
+    border-bottom-right-radius: 0.3rem;
+    box-shadow: 0 0px 5px rgb(30 32 37 / 12%);
+    -webkit-animation-name: DropDownSlide;
+    animation-name: DropDownSlide;
+    animation: growDown 300ms ease-in-out;
+    -webkit-animation-duration: 0.3s;
+    animation-duration: 0.3s;
+    -webkit-animation-fill-mode: both;
+    position: absolute;
+    width: -webkit-fill-available;
+}
+
+.dropdown-list ::after {
+    -webkit-transition: .25s all ease;
+    -o-transition: .25s all ease;
+    transition: .25s all ease;
+}
+
+.form-control {
+    line-height: 2;
+    border: 1px solid var(--vz-input-border) !important;
+}
+::ng-deep .offcanvas.offcanvas-end{
+    width: 45% !important;
+}

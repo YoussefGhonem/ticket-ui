@@ -1,0 +1,14 @@
+.custom-image {
+  border-radius: 2px;
+  max-width: 100%;
+  height: 200px;
+}
+
+.text-hover:hover {
+  color: rgb(103, 103, 195) !important;
+}
+
+::ng-deep .badge-soft-secondary {
+  color: #9599ad !important;
+  background-color: #e7e7ea !important;
+}

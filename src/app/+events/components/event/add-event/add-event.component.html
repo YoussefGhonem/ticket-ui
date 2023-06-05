@@ -1,0 +1,220 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Create Event" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+<form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-body">
+
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="mb-3 form-group">
+                <label class="form-label" for="project-title-input" [redStar]="eventForm.get('name')"> Event
+                  Name</label>
+                <input type="text" class="form-control" id="project-title-input" formControlName="name"
+                  [formControlValidator]="eventForm.get('name')" placeholder="Enter event name">
+                <arv-validation-messages for="name"></arv-validation-messages>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="mb-3 mb-lg-0">
+                <label for="eventTypeId" class="form-label" [redStar]="eventForm.get('eventTypeId')">Event
+                  Type</label>
+                <ng-select [items]="eventTypes" bindLabel="name" bindValue="id" #selectEventType id="eventTypeId"
+                  formControlName="eventTypeId" placeholder="Select Event Type">
+                  <ng-template ng-option-tmp let-item="item" let-index="index">
+                    <b>{{item.name}}</b>
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-lg-4">
+              <div class="mb-3 mb-lg-0 form-group">
+                <label class="form-label">Status</label>
+                <input type="text" class="form-control" value="Draft" disabled>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div>
+                <label class="form-label" [redStar]="eventForm.get('startDateTime')">Start Date</label>
+                <input class="form-control flatpickr-input" type="text" placeholder="Enter start date" mwlFlatpickr
+                  [enableTime]="true" [altInput]="true" [altFormat]="'F j, Y h:i K'" [convertModelValue]="true"
+                  [dateFormat]="'F j, Y H:i K'" #startDateTemp formControlName="startDateTime"
+                  [formControlValidator]="eventForm.get('startDateTime')">
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div>
+                <label class="form-label" [redStar]="eventForm.get('endDateTime')">End Date</label>
+                <input class="form-control flatpickr-input" type="text" placeholder="Enter end date" mwlFlatpickr
+                  [enableTime]="true" [altInput]="true" [altFormat]="'F j, Y h:i K'" [minDate]="'today'"
+                  [convertModelValue]="true" [dateFormat]="'Y-m-d H:i'" #endDateTemp formControlName="endDateTime"
+                  [formControlValidator]="eventForm.get('endDateTime')">
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="project-thumbnail-img" [redStar]="eventForm.get('coverImage')">Cover
+              Image</label>
+            <input class="form-control" id="project-thumbnail-img" type="file" #imageTag
+              accept="image/png, image/gif, image/jpeg, image/jfif" (change)="onFileChange($event, imageTag)"
+              [formControlValidator]="eventForm.get('coverImage')">
+            <small>Recommended resolution 400X200</small>
+            <arv-validation-messages for="coverImage"></arv-validation-messages>
+
+          </div>
+
+          <div class="mb-3 form-group">
+            <label class="form-label" [redStar]="eventForm.get('description')">Event Description</label>
+            <ckeditor [editor]="Editor" [config]="editorConfig" data="" formControlName="description"
+              [formControlValidator]="eventForm.get('description')">
+            </ckeditor>
+            <arv-validation-messages for="description"></arv-validation-messages>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Attached files</h5>
+        </div>
+        <div class="card-body">
+          <upload-files></upload-files>
+        </div>
+      </div>
+      <!-- end card -->
+      <div class="text-end mb-4">
+        <div class="d-flex gap-1 justify-content-end">
+          <button routerLink="/events" type="submit" class="btn btn-danger w-sm">Cancel</button>
+          <button [disabled]="ValidateLocationForm()" type="submit" class="btn btn-success w-sm">Save</button>
+        </div>
+      </div>
+    </div>
+    <!-- end col -->
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Expiration Period</h5>
+        </div>
+        <div class="card-body">
+          <div class="row mb-3">
+          <div class="col-lg-6">
+            <div class="mb-3 mb-lg-0">
+              <label for="days" class="form-label" [redStar]="eventForm.get('days')">Day</label>
+              <ng-select [items]="days" id="days"
+                formControlName="days" placeholder="Select Day">
+                <ng-option *ngFor="let item of days; let i=index;" [value]="item">{{item}}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="mb-3 mb-lg-0">
+              <label for="hours" class="form-label" [redStar]="eventForm.get('hours')">Hour</label>
+              <ng-select [items]="hours" id="hours"
+                formControlName="hours" placeholder="Select Hour">
+                <ng-option *ngFor="let item of hours; let i=index;" [value]="item">{{item}}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+          <span *ngIf="(eventForm.get('days').value == null || eventForm.get('days').value == 0) && (eventForm.get('hours').value == null || eventForm.get('hours').value == 0) && (eventForm.get('hours').touched || eventForm.get('days').touched)" 
+        class="text-danger" style="font-size: 0.875em;">At least one value is required</span>
+        </div>
+        </div>
+        <!-- end card body -->
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0" [redStar]="eventForm.get('eventLocation')">Location</h5>
+        </div>
+        <div class="card-body" formGroupName="eventLocation">
+
+          <!-- Without labels Radios -->
+          <div class="mb-3">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="locationType" [value]="locationType.onsite" id="WithoutinlineRadio1"
+                formControlName="locationType" (change)="clearOnline()">
+              <label class="form-check-label" for="WithoutinlineRadio1">Onsite</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="locationType" [value]="locationType.online" id="WithoutinlineRadio2"
+                formControlName="locationType" (change)="clearOnsite()">
+              <label class="form-check-label" for="WithoutinlineRadio2">Online</label>
+            </div>
+          </div>
+
+          <div class="mb-3" *ngIf="isOnline">
+            <label class="form-label" for="event-location-link">Event
+              Link</label>
+            <input [formControlValidator]="eventForm.get('eventLocation.locationLink')" type="text" class="form-control"
+              id="event-location-link" formControlName="locationLink" placeholder="Enter event link">
+            <arv-validation-messages for="locationLink"></arv-validation-messages>
+          </div>
+
+          <div class="mb-3" *ngIf="isOnsite">
+            <form [formGroup]="mapForm">
+            <input class="form-control mb-2" placeholder="Search location" formControlName="input" ngx-google-places-autocomplete
+              #placesRef="ngx-places" (onAddressChange)="handleAddressChange($event)" />
+            </form>
+            <!-- Google Maps-->
+            <agm-map [zoom]="14" [latitude]="lat" [longitude]="lng">
+              <agm-marker [latitude]="lat" [longitude]="lng" [markerDraggable]="true"></agm-marker>
+            </agm-map>
+          </div>
+
+          <div class="form-group">
+            <label for="locationDescription" class="form-label">Description</label>
+            <textarea class="form-control" id="locationDescription" formControlName="locationDescription"
+              rows="3"></textarea>
+          </div>
+
+        </div>
+        <!-- end card body -->
+      </div>
+      <!-- end card -->
+
+
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Members</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Member</label>
+            <ng-select [items]="members" [multiple]="true" bindLabel="name" bindValue="id"
+              formControlName="eventMemberIds" id="id" placeholder="Select member"
+              (change)="onSelectChange($event)">
+              <ng-template ng-option-tmp let-item="item" let-index="index">
+                <img [src]="item?.imageUrl | secure | async" #imageTag default-image
+                  class="rounded-circle avatar-xs img-fluid img-thumbnail" alt="user-profile-image" />
+                <b class="m-2">{{item.name}}</b>
+              </ng-template>
+            </ng-select>
+          </div>
+
+          <div *ngIf="selectedMembers?.length > 0">
+            <label class="form-label">Team Members</label>
+            <div class="avatar-group">
+              <ng-container *ngFor="let member of selectedMembers">
+                <a href="javascript: void(0);" class="avatar-group-item" [ngbTooltip]="member?.name" placement="top">
+                  <div>
+                    <img [src]="member?.imageUrl | secure | async" default-image alt=""
+                      class="rounded-circle avatar-xs img-thumbnail img-fluid">
+                  </div>
+                </a>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        <!-- end card body -->
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col -->
+  </div>
+  <!-- end row -->
+</form>

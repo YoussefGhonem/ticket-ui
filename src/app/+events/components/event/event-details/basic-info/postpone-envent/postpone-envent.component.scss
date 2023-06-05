@@ -1,0 +1,15 @@
+agm-map {
+    height: 300px !important;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+::ng-deep .modal {
+    z-index: 702 !important;
+}
+
+::ng-deep ngb-modal-backdrop {
+    z-index: 701 !important;
+}
+

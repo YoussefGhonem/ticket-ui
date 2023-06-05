@@ -1,0 +1,51 @@
+<div class="card" style="margin-bottom: 0.75rem;">
+  <div class="card-body">
+    <div class="d-flex align-items-center mb-2">
+      <h5 class="card-title flex-grow-1"><b>Performances</b></h5>
+      <ng-container *ngIf="hasAllowedAction( allowedActions.Edit)">
+        <button [ngbTooltip]="'Edit'" *ngIf="!editMode" class="btn btn-sm" style="padding: 0;" (click)="onEditClick()">
+          <i class=" ri-edit-2-fill text-info fs-17"></i></button>
+
+      </ng-container>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <ng-container *ngIf="!editMode">
+          <ul>
+            <li class="text-dark" *ngFor="let item of performancesList">{{item}}</li>
+          </ul>
+        </ng-container>
+
+        <ng-container *ngIf="editMode">
+          <form [formGroup]="form">
+            <ng-container formArrayName="performances">
+              <div class="mb-2" *ngFor="let item of performances?.controls; let i=index">
+                <div [formGroupName]="i">
+                  <div class="d-flex mb-2 form-group">
+                  <div class="input-icons">
+                    <input [formControlValidator]="getPerformance(i).get('performance')" formControlName="performance" [id]="'input' + i" type="text" #valueInput
+                      class="form-control flex-grow-1" />
+                    <arv-validation-messages [for]="getPerformanceControl(i)"></arv-validation-messages>
+                  </div>
+                  <i class=" ri-delete-bin-6-line m-2 text-danger cursor-pointer" (click)="deletePerformance(i)"></i>
+                </div>
+              </div>
+              </div>
+            </ng-container>
+          </form>
+          <button class="btn btn-soft-primary float-end" [disabled]="form.invalid" (click)="addPerformance()"><i
+              class=" ri-add-fill fs-14"></i></button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer" *ngIf="editMode">
+    <button class="btn btn-soft-success btn-sm float-end" [disabled]="form.invalid || validate() || !form.dirty" (click)="onSaveClick()"> Save
+      Changes</button>
+    <button class="btn btn-soft-info btn-sm float-end" style="margin-right: 5px;" (click)="onCancelClick()">
+      Cancel
+    </button>
+  </div>
+</div>

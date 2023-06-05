@@ -1,0 +1,225 @@
+<div class="auth-page-wrapper pt-5">
+  <!-- auth page bg -->
+  <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
+
+    <div class="shape">
+      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1440 120">
+        <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
+      </svg>
+    </div>
+  </div>
+
+  <!-- auth page content -->
+  <div class="auth-page-content">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="text-center mt-sm-5 mb-4 text-white-50">
+            <div>
+              <a routerLink="" class="d-inline-block auth-logo">
+                <img src="assets/images/logo-light.png" alt="" [height]="90" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end row -->
+
+      <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 col-xl-6">
+          <div class="card mt-4">
+            <ng-container *ngIf="displayForm">
+              <ng-container *ngTemplateOutlet="formTemp"></ng-container>
+            </ng-container>
+            <ng-container *ngIf="!displayForm">
+              <ng-container *ngTemplateOutlet="successTemp"></ng-container>
+            </ng-container>
+          </div>
+          <!-- end card -->
+
+          <div class="mt-4 text-center">
+            <p class="mb-0">
+              Already have an account ?
+              <a routerLink="/auth/login" class="fw-semibold text-primary text-decoration-underline">
+                <u><I>Sign in</I></u>
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="text-center">
+            <p class="mb-0 text-muted">© {{ year }} Events RSVP</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<ng-template #successTemp>
+  <div class="card-body p-4 text-center">
+    <div class="avatar-lg mx-auto mt-2">
+      <div class="avatar-title bg-light text-success display-3 rounded-circle">
+        <i class="ri-checkbox-circle-fill"></i>
+      </div>
+    </div>
+    <div class="mt-4 pt-2">
+      <h4>Success!</h4>
+      <p class="text-muted mx-4">You have registered successfully</p>
+      <div class="mt-4">
+        <a routerLink="/auth/login" class="btn btn-success w-100">Back to Login</a>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #formTemp>
+  <div class="card-body p-4">
+    <div class="text-center mt-2">
+      <h5 class="text-primary">Create New Vendor Account</h5>
+    </div>
+    <div class="p-2 mt-4">
+      <form [formGroup]="signupForm">
+        <div class="row">
+          <div class="col-md-6 col-lg-6 form-group">
+            <div class="mb-3">
+              <label for="firstName" class="form-label" [redStar]="signupForm.get('firstName')">First Name</label>
+              <input [formControlValidator]="signupForm.get('firstName')" type="text" class="form-control"
+                id="firstName" placeholder="Enter First Name" formControlName="firstName" />
+              <arv-validation-messages for="firstName"></arv-validation-messages>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-6 form-group">
+            <div class="mb-3">
+              <label for="lastname" class="form-label" [redStar]="signupForm.get('lastName')">Last Name</label>
+              <input [formControlValidator]="signupForm.get('lastName')" type="text" class="form-control" id="lastname"
+                placeholder="Enter Last Name" formControlName="lastName" />
+              <arv-validation-messages for="lastName">
+              </arv-validation-messages>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 form-group">
+          <label for="email" class="form-label" [redStar]="signupForm.get('email')">Email
+          </label>
+          <input type="email" class="form-control" id="email" [formControlValidator]="signupForm.get('email')"
+            placeholder="Enter email address" formControlName="email" />
+          <arv-validation-messages for="email"> </arv-validation-messages>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-lg-6 form-group">
+            <div class="mb-3">
+              <label class="form-label" [redStar]="signupForm.get('password')">Password
+              </label>
+              <div class="position-relative auth-pass-inputgroup">
+                <input id="password-input" (focus)="showValidationPasswordOption()"
+                  [type]="fieldTextType ? 'text' : 'password'" class="form-control pe-5 password-input"
+                  placeholder="Enter password" aria-describedby="passwordInput"
+                  [formControlValidator]="signupForm.get('password')" formControlName="password"
+                  (change)="onValidationChange()" />
+
+                <button style="margin-right: 16px"
+                  class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+                  type="button">
+                  <i class="ri-eye-fill align-middle" [ngClass]="{
+                      'mdi-eye-off-outline': !fieldTextType,
+                      'mdi-eye-outline': fieldTextType
+                    }" (click)="toggleFieldTextType()"></i>
+                </button>
+                <arv-validation-messages for="password">
+                </arv-validation-messages>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-6 form-group">
+            <div class="mb-3">
+              <label class="form-label" [redStar]="signupForm.get('confirmPassword')">Confirm Password
+              </label>
+              <div class="position-relative auth-pass-inputgroup">
+                <input [type]="fieldTextTypeForConfirm ? 'text' : 'password'" class="form-control pe-5 password-input"
+                  id="confirm-password-input" placeholder="Re-enter password" formControlName="confirmPassword"
+                  [formControlValidator]="signupForm.get('confirmPassword')" />
+
+                <button style="margin-right: 16px"
+                  class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+                  type="button">
+                  <i class="ri-eye-fill align-middle" [ngClass]="{
+                      'mdi-eye-off-outline': !fieldTextTypeForConfirm,
+                      'mdi-eye-outline': fieldTextTypeForConfirm
+                    }" (click)="toggleFieldTextTypeForConfirmPassword()"></i>
+                </button>
+                <arv-validation-messages for="confirmPassword">
+                </arv-validation-messages>
+                <span class="text-danger" style="font-size:0.875em ;" *ngIf="signupForm.getRawValue().confirmPassword != signupForm.getRawValue().password && !signupForm.get('confirmPassword').errors">
+                  Passwords don't match.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="password-contain" class="p-3 bg-light mb-2 rounded">
+          <validation-password-options></validation-password-options>
+        </div>
+
+        <div class="mb-3 form-group phoneNumber">
+          <label class="form-label" [redStar]="signupForm.get('phoneNumber')">Phone Number</label>
+          <div class="input-group">
+            <ng-select aria-label-text="callingCode" [items]="countries" bindLabel="name" bindValue="callingCode"
+              id="callingCode" formControlName="callingCode">
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <img class="rounded" height="15" width="15" [src]="item.flag" />
+                <b>{{' (+' + item.callingCode + ')'}}</b>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-index="index">
+                <img class="rounded-circle" height="15" width="15" [src]="item.flag" />
+                <b>{{' (+' + item.callingCode + ')'}}</b>
+              </ng-template>
+            </ng-select>
+            <input aria-label="phoneNumber" type="text" id="phoneNumber" class="form-control" placeholder="Enter Phone Number"
+              formControlName="phoneNumber" mask="0000999999"
+              [formControlValidator]="signupForm.get('phoneNumber')" />
+          </div>
+          <arv-validation-messages for="callingCode"></arv-validation-messages>
+          <arv-validation-messages for="phoneNumber"> </arv-validation-messages>
+        </div>
+
+        <!-- Info Alert -->
+        <div class="alert alert-info alert-top-border alert-dismissible fade show" role="alert">
+          <i class="ri-information-line me-3 align-middle fs-16 text-info"></i>
+          Please Preview And Sign Our <a
+            [ngClass]="{ 'disable-link': verificationDocument?.verificationDocumentUrl == null}"
+            (click)="openPreviewAndSign()" href="javascript:void(0)" class="text-info fs-12"> <u><b>Verification
+                Document</b></u> </a>
+        </div>
+
+
+        <div class="mt-4">
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" formControlName="agreeTermsAndConditions" />
+            <label class="form-check-label">
+              I agree to
+              <a href="/auth/terms-and-conditions" class="text-secondary" target="_blank"><u><I>terms and
+                    conditions</I></u></a>
+            </label>
+          </div>
+          <button [disabled]="signupForm.invalid || verificationDocument?.verificationDocumentUrl == null || signupForm.getRawValue().confirmPassword != signupForm.getRawValue().password"
+            class="btn btn-success w-100" type="submit" (click)="onSubmit()">
+            Sign Up
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- end card body -->
+</ng-template>

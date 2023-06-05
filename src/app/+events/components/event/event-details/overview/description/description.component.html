@@ -1,0 +1,38 @@
+<div class="card" style="margin-bottom: 0.75rem;">
+  <div class="card-body">
+    <div class="d-flex align-items-center mb-2">
+      <h5 class="card-title flex-grow-1"><b>Event Description</b></h5>
+      <ng-container *ngIf="hasAllowedAction( allowedActions.Edit)">
+        <button [ngbTooltip]="'Edit'" *ngIf="!editMode" class="btn btn-sm" style="padding: 0;" (click)="onEditClick()">
+          <i class=" ri-edit-2-fill text-info fs-17"></i></button>
+
+      </ng-container>
+    </div>
+    <div class="row">
+      <ng-container *ngIf="!editMode">
+        <ngx-simplebar style="max-height: 350px;" class="px-3">
+          <div [innerHTML]="description"></div>
+        </ngx-simplebar>
+      </ng-container>
+
+      <ng-container *ngIf="editMode">
+        <form [formGroup]="updateDescriptionForm">
+          <div class="form-group">
+            <ckeditor [formControlValidator]="updateDescriptionForm.get('description')" [editor]="Editor"
+              [config]="editorConfig" formControlName="description">
+            </ckeditor>
+            <arv-validation-messages for="description"></arv-validation-messages>
+          </div>
+        </form>
+      </ng-container>
+    </div>
+  </div>
+  <div class="card-footer" *ngIf="editMode">
+    <button class="btn btn-soft-success btn-sm float-end"
+      [disabled]="updateDescriptionForm.invalid || !updateDescriptionForm.dirty || updateDescriptionForm.pristine"
+      (click)="onSaveClick()"> Save </button>
+    <button class="btn btn-soft-info btn-sm float-end" style="margin-right: 5px;" (click)="onCancelClick()">
+      Cancel
+    </button>
+  </div>
+</div>

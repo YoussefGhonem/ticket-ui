@@ -1,0 +1,17 @@
+::ng-deep ng-select{
+    width: 100px;
+    border-right-width: 0px;
+}
+
+::ng-deep .ng-select.ng-select-single .ng-select-container {
+    height: 38px;
+    border-radius: 5px 0px 0px 5px;
+}
+
+::ng-deep .ng-clear-wrapper {
+    display: none;
+}
+
+::ng-deep .input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+    margin-left: 0px;
+}

@@ -1,0 +1,186 @@
+<div class="row" [formGroup]="form">
+  <!-- <div style="margin-bottom:7px;color: #3577F1; border-radius: 4px;">
+        <div class="text-end">
+          <div class="d-flex justify-content-end">
+            <button [disabled]="events?.length == 0" style="width: 130px;" type="button" class="btn btn-info"
+              (click)="exportAssignedEvents()"> <i class="ri-file-excel-2-line align-bottom me-1"></i>
+              Export
+            </button>
+          </div>
+        </div>
+      </div> -->
+  <div class="container">
+    <!-- Export -->
+    <div class="row">
+      <div class="col-lg-12 d-flex justify-content-end">
+        <div style="margin-bottom:7px;color: #3577F1; border-radius: 4px;">
+          <div class="text-end">
+            <div class="d-flex justify-content-end">
+              <button [disabled]="events?.length == 0" style="width: 130px;" type="button" class="btn btn-info"
+                (click)="exportAssignedEvents()"> <i class="ri-file-excel-2-line align-bottom me-1"></i>
+                Export
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-between">
+      <!-- Search box and filters -->
+      <div class="col-lg-8">
+        <div class="search-box">
+          <input type="text" formControlName="name" class="form-control "
+            placeholder="Search by event name or ref number" id="custom-control">
+          <i class="ri-search-line search-icon"></i>
+          <div class="search-button" (click)="assignedEventToggleSearch()">
+            <i *ngIf="!dropdownOpen" class="ri-equalizer-line custom-search-icon d-flex flex-row-reverse text-dark"><span
+                style="padding-bottom: 2px; padding-right: 3px;font-family: sans-serif;font-size: medium;">Filters</span>
+            </i>
+            <i *ngIf="dropdownOpen" [ngbTooltip]="'Close'"
+              class="ri-equalizer-line custom-search-icon d-flex flex-row-reverse text-dark"></i>
+          </div>
+          <i *ngIf="chowDeleteIcon()" (click)="clearSearchBar()"
+          class="ri-close-line custom-delete-search-icon d-flex flex-row-reverse"> </i>
+        </div>
+      </div>
+
+      <!-- Sort by -->
+      <div class="col-lg-4">
+        <div class="d-flex justify-content-end">
+          <ng-select [clearable]="true" [items]="eventSort" bindValue="name" formControlName="sortField"
+            placeholder="Sort by">
+            <ng-template ng-label-tmp let-item="item">
+              {{item.name | humanize}}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-index="index">
+              <b>{{item.name | humanize}}</b>
+            </ng-template>
+          </ng-select>
+          <ng-container *ngIf="form.getRawValue().sortField">
+            <i *ngIf="form.getRawValue().sortOrder == sortedEnum.Ascending" class="ri-sort-asc custom-sort-icon"
+              [ngbTooltip]="'Ascending'" style="cursor: pointer;" (click)="onSortChanges(sortedEnum.Descending)">
+            </i>
+            <i *ngIf="form.getRawValue().sortOrder == sortedEnum.Descending"
+              (click)="onSortChanges(sortedEnum.Ascending)" style="cursor: pointer;"
+              class="ri-sort-desc custom-sort-icon" [ngbTooltip]="'Descending'">
+            </i>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-8 col-sm-12">
+    <!-- <div class="search-box">
+      <input type="text" formControlName="name" class="form-control "
+        placeholder="Search by event name or ref number .." id="custom-control">
+      <i class="ri-search-line search-icon"></i>
+      <div class="search-button" (click)="assignedEventToggleSearch()">
+        <i *ngIf="!dropdownOpen" class="ri-equalizer-line custom-search-icon d-flex flex-row-reverse "><span
+            style="padding-bottom: 2px; padding-right: 3px;font-family: sans-serif;font-size: medium;">Filters</span>
+        </i>
+        <i *ngIf="dropdownOpen" [ngbTooltip]="'Close'"
+          class="ri-close-line custom-search-icon d-flex flex-row-reverse"></i>
+      </div>
+
+      <i *ngIf="form.get('name').value !== null" (click)="clearSearchBar()"
+        class="ri-close-line custom-delete-search-icon d-flex flex-row-reverse"> </i>
+    </div> -->
+  </div>
+
+  <div class="col-lg-4 col-sm-12">
+    <!-- <div class="d-flex justify-content-start">
+        <ng-select [clearable]="true" [items]="eventSort" bindValue="name" formControlName="sortField"
+          placeholder="Sort by">
+          <ng-template ng-label-tmp let-item="item">
+            {{item.name | humanize}} &nbsp; &nbsp; &nbsp;
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-index="index">
+            <b>{{item.name | humanize}}</b>
+          </ng-template>
+        </ng-select>
+        <ng-container>
+          <i *ngIf="form.getRawValue().sortOrder == sortedEnum.Ascending" class="ri-sort-asc custom-sort-icon"
+            [ngbTooltip]="'Ascending'" style="cursor: pointer;" (click)="onSortChanges(sortedEnum.Descending)">
+          </i>
+          <i *ngIf="form.getRawValue().sortOrder == sortedEnum.Descending" (click)="onSortChanges(sortedEnum.Ascending)"
+            style="cursor: pointer;" class="ri-sort-desc custom-sort-icon" [ngbTooltip]="'Descending'">
+          </i>
+        </ng-container>
+      </div> -->
+
+  </div>
+
+</div>
+
+<div class="row">
+  <div class="col-lg-7 col-sm-12" [formGroup]="form">
+    <ul class="assigned-events-dropdown-list" aria-expanded="true" role="listbox"
+      [ngClass]="{'dropdown-open' : dropdownOpen}" #toggle>
+      <div class="modal-body">
+        <div class="row gy-4 mb-3">
+
+          <div class="col-md-6 form-group">
+            <label class="form-label">Status
+            </label>
+
+            <ng-select [clearable]="true" [items]="eventStatus" bindLabel="name" bindValue="id" id="eventTypeId"
+              *ngxPermissionsOnly="[vendorAdminRole, vendorRole,committeeMemberRole]" formControlName="status"
+              placeholder="Select Status">
+              <ng-option [value]="' '"><b>All</b></ng-option>
+              <ng-template ng-option-tmp let-item="item" let-index="index">
+                <b>{{item.name}}</b>
+              </ng-template>
+            </ng-select>
+
+            <ng-select *ngxPermissionsOnly="[localAdminRole, superAdminRole]" [clearable]="true"
+              [items]="statusForAdmin" bindLabel="name" bindValue="id" id="eventTypeId" formControlName="status"
+              placeholder="Select Status">
+              <ng-template ng-option-tmp let-item="item" let-index="index">
+                <b>{{item.name}}</b>
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="col-md-6 form-group">
+            <label class="form-label">Type
+            </label>
+            <ng-select bindLabel="name" bindValue="id" placeholder="Select Type" appendTo="body" [searchable]="true"
+              formControlName="eventTypeId" [clearable]="true">
+              <ng-option [value]="' '"><b>All</b></ng-option>
+              <ng-option [value]="item.id" *ngFor="let item of eventTypes">
+                <b>{{item.name}}</b>
+              </ng-option>
+            </ng-select>
+          </div>
+          <div class="col-md-6 form-group">
+            <label class="form-label">Start Date</label>
+            <input class="form-control flatpickr-input" type="text" placeholder="Enter start date" mwlFlatpickr
+              [enableTime]="true" [altInput]="true" [altFormat]="'F j, Y h:i K'" [convertModelValue]="true"
+              [dateFormat]="'F j, Y H:i K'" formControlName="startDate">
+            <i *ngIf="form.get('startDate').value !== null" (click)="clearStartDate()"
+              class="ri-close-line custom-delete-date-icon d-flex flex-row-reverse"> </i>
+          </div>
+          <div class="col-md-6 form-group">
+            <label class="form-label">End Date
+            </label>
+            <input class="form-control flatpickr-input" type="text" placeholder="Enter end date" mwlFlatpickr
+              [enableTime]="true" [altInput]="true" [altFormat]="'F j, Y h:i K'" [convertModelValue]="true" data-clear
+              [dateFormat]="'Y-m-d H:i'" formControlName="endDate">
+            <i *ngIf="form.get('endDate').value !== null" (click)="clearEndDate()"
+              class="ri-close-line custom-delete-date-icon d-flex flex-row-reverse"> </i>
+          </div>
+          <div class="text-end">
+            <div class="d-flex gap-1 justify-content-end">
+              <button type="button" class="btn btn-light w-sm" (click)="clear()">Clear
+                Filter
+              </button>
+              <button type="button" (click)="search()" class="btn btn-success w-sm">Search</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ul>
+
+  </div>
+</div>

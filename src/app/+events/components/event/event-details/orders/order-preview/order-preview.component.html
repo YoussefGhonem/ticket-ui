@@ -1,0 +1,22 @@
+<ngx-simplebar class="h-100" style="padding-bottom: 50px;">
+
+    <div class="row w-100">
+        <div class="col-12 my-2 px-4">
+            <customer-order [order]="order"></customer-order>
+        </div>
+
+        <hr class="dashed-line my-2">  
+
+        <div class="col-12 my-2 px-4">
+            <payment-details-preview [order]="order"></payment-details-preview>
+        </div>
+
+        <hr class="dashed-line my-2">  
+
+        <div class="col-12 my-2 px-4">
+            <order-items-preview [order]="order"></order-items-preview>
+        </div>
+
+
+    </div>
+</ngx-simplebar>

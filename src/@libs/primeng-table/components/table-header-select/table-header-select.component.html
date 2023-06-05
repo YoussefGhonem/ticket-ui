@@ -1,0 +1,4 @@
+<p-multiSelect [options]="columns" [(ngModel)]="selectedColumns" (ngModelChange)="fire($event)"
+    optionLabel="title" [resetFilterOnHide]="true" selectedItemsLabel="{0} {{'columns selected'}}"
+    [style]="{minWidth: '250px', height: '40px', lineHeight: '15px'}" placeholder="{{'Choose Columns'}}">
+</p-multiSelect>

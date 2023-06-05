@@ -1,0 +1,10 @@
+
+<event-tab-filters [form]="form" (notify)="loadEvents()" [events]="events" [user]="user"></event-tab-filters>
+
+<events-tab-card [events]="events" (notify)="loadEvents()"></events-tab-card>
+
+<div style="margin-bottom: 1%" *ngIf="events?.length > 0">
+  <app-pagination (pageChange)="pageChange($event)" [pageNumber]="form.getRawValue().pageNumber"
+    [pageSize]="form.getRawValue().pageSize" [total]="total">
+  </app-pagination>
+</div>

@@ -1,0 +1,67 @@
+<div class="row">
+  <div class="card" style="margin-bottom: 0.75rem;">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-12">
+          <app-event-tickets-filter [eventAllowedActions]="eventAllowedActions" [form]="form"
+            (notify)="loadTicketTypes();loadActivitiesEvent();"
+            (complementary)="loadComplementary();loadActivitiesEvent();" (loadEvent)="loadEventDetails()">
+          </app-event-tickets-filter>
+          <div class="row my-3">
+            <!-- Info Alert -->
+            <div class="col-12" *ngIf="hasAllowedAction(allowedActions.Edit) || hasAllowedAction(allowedActions.EditWhenPublished)">
+              <div class="alert alert-info alert-top-border alert-dismissible fade show" role="alert">
+                <i class="ri-airplay-line me-3 align-middle fs-16 text-info"></i><strong>Max Capacity</strong>
+                is limitless, you can set a hard limit for the total number of tickets
+                regardless of ticket types >> <a class="ancor-tag"
+                  (click)="onClickAdjustMaxCapacity()"><strong>here</strong></a>
+              </div>
+            </div>
+
+            <div class="col-md-12 col-lg-12 col-sm-12" *ngIf="complementaryTicket !== null">
+              <div class="row">
+                <div class="col-md-3 col-lg-3 col-sm-6">
+                  <complementart-ticket-card [ticketType]="complementaryTicket"
+                    [eventAllowedActions]="eventAllowedActions" [eventId]="eventId"
+                    (loadComplementary)="loadComplementary();loadActivitiesEvent()" (loadData)="loadEventDetails()">
+                  </complementart-ticket-card>
+                </div>
+              </div>
+            </div>
+            <ng-container *ngIf="ticketTypes?.length > 0; else emptyTemp">
+              <ng-container *ngFor="let ticketType of ticketTypes; let i = index">
+                <div class="col-md-3 col-lg-3 col-sm-6">
+                  <ticket-card [ticketType]="ticketType" [eventAllowedActions]="eventAllowedActions"
+                    [percentage]="percentage" [eventId]="eventId" (notify)="loadTicketTypes();loadActivitiesEvent();"
+                    (loadEvent)="loadEventDetails()">
+                  </ticket-card>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+          <div style="margin-bottom: 1%">
+            <app-pagination *ngIf="ticketTypes?.length>0" (pageChange)="pageChange($event)"
+              [pageNumber]="form.getRawValue().pageNumber" [pageSize]="form.getRawValue().pageSize" [total]="total">
+            </app-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #emptyTemp>
+  <div class="tab-pane" id="productnav-draft" role="tabpanel">
+    <div class="py-4 text-center">
+      <div>
+        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+          colors="primary:#405189,secondary:#0ab39c" style="width:72px;height:72px">
+        </lord-icon>
+      </div>
+      <div class="mt-4">
+        <h5>Sorry! No Result Found</h5>
+      </div>
+    </div>
+  </div>
+</ng-template>

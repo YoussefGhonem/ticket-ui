@@ -1,0 +1,71 @@
+<div class="row">
+  <div class="col-lg-12" *ngIf="eventBasicInfo?.status == eventStatus.Published">
+
+    <statistics></statistics>
+  </div>
+
+  <div class="col-lg-9">
+    <app-event-description [description]="overview?.description" [eventAllowedAction]="eventBasicInfo?.allowedActions"
+      (getNewDescription)="loadEventOverview();loadActivitiesEvent()">
+    </app-event-description>
+
+    <div class="card" style="margin-bottom: 0.75rem;">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="row">
+
+              <div class="col-lg-2 col-sm-6">
+                <div>
+                  <p class="mb-2 text-uppercase fw-medium">Reference :</p>
+                  <h5 class="fs-15 mb-0" [ngbTooltip]="eventBasicInfo?.reference">{{eventBasicInfo?.reference |
+                    truncate: 10: '..'}}</h5>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-sm-6">
+                <div>
+                  <p class="mb-2 text-uppercase fw-medium">From :</p>
+                  <h5 class="fs-15 mb-0">{{eventBasicInfo?.startDate | datetime}}</h5>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div>
+                  <p class="mb-2 text-uppercase fw-medium">To :</p>
+                  <h5 class="fs-15 mb-0">{{eventBasicInfo?.endDate | datetime}}</h5>
+                </div>
+              </div>
+              <div class="col-lg-2 col-sm-6">
+                <div>
+                  <p class="mb-2 text-uppercase fw-medium">Type :</p>
+                  <h5 class="fs-15 mb-0" [ngbTooltip]="eventBasicInfo?.typeName">{{eventBasicInfo?.typeName | truncate:
+                    10:'..'}}</h5>
+                </div>
+              </div>
+              <div class="col-lg-2 col-sm-6">
+                <div>
+                  <p class="mb-2 text-uppercase fw-medium">Status :</p>
+                  <div [eventStatusBadge]="eventStatus[eventBasicInfo?.status]">{{eventStatus[eventBasicInfo?.status]}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <app-event-performances [eventAllowedAction]="eventBasicInfo?.allowedActions"
+      [performancesList]="overview?.performances" (loadNewData)="loadEventOverview();loadActivitiesEvent()">
+    </app-event-performances>
+    <app-event-attachments [eventAllowedAction]="eventBasicInfo?.allowedActions"></app-event-attachments>
+
+  </div>
+
+  <div class="col-lg-3">
+    <app-event-location [eventAllowedAction]="eventBasicInfo?.allowedActions" [eventLocation]="overview?.eventLocation"
+      (getNewLocation)="loadEventOverview()"
+      (getNewLocation)="loadEventOverview();loadActivitiesEvent()"></app-event-location>
+
+  </div>
+</div>

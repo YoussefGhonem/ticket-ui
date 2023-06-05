@@ -1,0 +1,120 @@
+<!-- Order Create Model -->
+<ng-container #content role="document">
+  <div class="modal-header bg-light p-3">
+    <h5 class="modal-title" id="addModal"> Set Max Capacity</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+      (click)="modalService.close()"></button>
+  </div>
+  <ng-container *ngIf="eventStatus == 1 || eventStatus == null">
+    <ng-container *ngTemplateOutlet="draft"></ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="eventStatus == 2">
+    <ng-container *ngTemplateOutlet="published"></ng-container>
+  </ng-container>
+</ng-container>
+<!--End Modal -->
+
+<ng-template #draft>
+  <form [formGroup]="form">
+    <div class="modal-body">
+      <div class="row gy-4 mb-3">
+
+        <!-- Info Alert -->
+        <div class="alert alert-info alert-top-border alert-dismissible fade show" role="alert">
+          <i class="ri-airplay-line me-3 align-middle fs-16 text-info"></i><strong>Hint</strong>
+          - Set a hard limit for the total number of tickets
+          regardless of ticket types
+        </div>
+
+        <div class="mb-3">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="unlimited" id="WithoutinlineRadio1" [value]="true"
+              formControlName="unlimited">
+            <label class="form-check-label" for="WithoutinlineRadio1">Unlimited</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="unlimited" id="WithoutinlineRadio2" [value]="false"
+              formControlName="unlimited">
+            <label class="form-check-label" for="WithoutinlineRadio2">Limit Capacity</label>
+          </div>
+        </div>
+
+        <div class="col-md-12 form-group" *ngIf="form.getRawValue().unlimited != true">
+          <label for="amount-field" [redStar]="form.get('maxCapacity')" class="form-label">Max Capacity</label>
+          <div class="input-step full-width">
+            <button type="button" class="minus" [disabled]="form.get('maxCapacity').value <= 0" (click)="defaultfulldecrement()">–</button>
+            <input type="number" [formControlValidator]="form.get('maxCapacity')" formControlName="maxCapacity"
+              class="product-quantity" mask="9*" min="0" max="100" readonly>
+            <button type="button" class="plus" (click)="defaultfullincrement()">+</button>
+          </div>
+          <arv-validation-messages for="maxCapacity">
+          </arv-validation-messages>
+          <span class="text-danger" style="font-size:0.875em ;" *ngIf="isNotInt(form.getRawValue().maxCapacity)">
+            Value must be integer.</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modalService.close()">Cancel
+        </button>
+        <button [disabled]="form.invalid || form.pristine || validValues()" type="button" (click)="submit()" class="btn btn-success" id="add-btn">Save
+        </button>
+
+      </div>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #published>
+  <form [formGroup]="form">
+    <div class="modal-body">
+      <div class="row gy-4 mb-3">
+
+        <!-- Info Alert -->
+        <div class="alert alert-info alert-top-border alert-dismissible fade show" role="alert">
+          <i class="ri-airplay-line me-3 align-middle fs-16 text-info"></i><strong>Hint</strong>
+          - Set a hard limit for the total number of tickets
+          regardless of ticket types
+        </div>
+
+        <div class="mb-3">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" [disabled]="maxCapacity != null" type="radio" name="unlimited" id="WithoutinlineRadio1" [value]="true"
+              formControlName="unlimited">
+            <label class="form-check-label" for="WithoutinlineRadio1">Unlimited</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" [disabled]="maxCapacity == null" type="radio" name="unlimited" id="WithoutinlineRadio2" [value]="false"
+              formControlName="unlimited">
+            <label class="form-check-label" for="WithoutinlineRadio2">Limit Capacity</label>
+          </div>
+        </div>
+
+        <div class="col-md-12 form-group" *ngIf="form.getRawValue().unlimited != true">
+          <label for="amount-field" [redStar]="form.get('maxCapacity')" class="form-label">Max Capacity</label>
+          <div class="input-step full-width">
+            <button type="button" class="minus" [disabled]="form.get('maxCapacity').value <= maxCapacity" (click)="defaultfulldecrement()">–</button>
+            <input type="number" [formControlValidator]="form.get('maxCapacity')" formControlName="maxCapacity"
+              class="product-quantity" mask="9*" min="0" max="100" readonly>
+            <button type="button" class="plus" (click)="defaultfullincrement()">+</button>
+          </div>
+          <arv-validation-messages for="maxCapacity">
+          </arv-validation-messages>
+          <span class="text-danger" style="font-size:0.875em ;" *ngIf="isNotInt(form.getRawValue().maxCapacity)">
+            Value must be integer.</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modalService.close()">Cancel
+        </button>
+        <button [disabled]="form.invalid || form.pristine || validValues()" type="button" (click)="submit()" class="btn btn-success" id="add-btn">Save
+        </button>
+
+      </div>
+    </div>
+  </form>
+</ng-template>

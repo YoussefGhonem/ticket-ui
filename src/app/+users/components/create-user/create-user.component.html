@@ -1,0 +1,77 @@
+<!-- Order Create Model -->
+<ng-container #content role="document">
+  <div class="modal-header bg-light p-3">
+    <h5 class="modal-title" *ngIf="role==userRolesEnum.Vendor"> New Vendor</h5>
+    <h5 class="modal-title" *ngIf="role==userRolesEnum.LocalAdmin"> New Local Admin</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+            (click)="modalService.close()"></button>
+  </div>
+  <form (ngSubmit)="submit()" [formGroup]="form">
+    <div class="modal-body">
+      <div class="row gy-4 mb-3">
+        <div class="col-md-6 form-group">
+          <label class="form-label" [redStar]="form.get('firstName')">First Name</label>
+          <input [formControlValidator]="form.get('firstName')" type="text"
+                 class="form-control" placeholder="Enter First Name" formControlName="firstName"/>
+          <arv-validation-messages for="firstName">
+          </arv-validation-messages>
+        </div>
+        <div class="col-md-6 form-group">
+          <label class="form-label" [redStar]="form.get('lastName')">Last Name
+          </label>
+          <input [formControlValidator]="form.get('lastName')" type="text"
+                 class="form-control" placeholder="Enter Last Name" formControlName="lastName"/>
+          <arv-validation-messages for="lastName">
+          </arv-validation-messages>
+        </div>
+        <div class="col-md-12 form-group">
+          <label class="form-label" [redStar]="form.get('phoneNumber')">Phone Number</label>
+          <div class="input-group">
+              <ng-select aria-label-text="callingCode" [items]="countries" bindLabel="name" bindValue="callingCode" id="callingCode"
+              formControlName="callingCode" [formControlValidator]="form.get('callingCode')">
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <img class="rounded" height="15" width="15" [src]="item.flag" />
+                <b>{{' (+' + item.callingCode + ')'}}</b>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-index="index">
+                <img class="rounded-circle" height="15" width="15" [src]="item.flag" />
+                <b>{{' (+' + item.callingCode + ')'}}</b>
+              </ng-template>
+            </ng-select>
+              <input aria-label="phoneNumber" type="text" id="phoneNumber" class="form-control" placeholder="Enter Phone Number" formControlName="phoneNumber"
+                mask="0000999999" [formControlValidator]="form.get('phoneNumber')" />
+          </div>
+          <arv-validation-messages for="callingCode"></arv-validation-messages>
+          <arv-validation-messages for="phoneNumber"> </arv-validation-messages>
+        </div>
+        <div class="col-md-12 form-group">
+          <label class="form-label" [redStar]="form.get('email')">Email
+          </label>
+          <input [formControlValidator]="form.get('email')" type="text"
+                 class="form-control" placeholder="Enter Email" formControlName="email"/>
+          <arv-validation-messages for="email">
+          </arv-validation-messages>
+        </div>
+      </div>
+      <!-- Info Alert -->
+      <div class="alert alert-info alert-top-border alert-dismissible fade show" role="alert">
+        <i class="ri-airplay-line me-3 align-middle fs-16 text-info"></i>
+        User should recieve an email to reset password.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modalService.close()">Cancel
+        </button>
+        <button [disabled]="form.invalid" type="submit" class="btn btn-success" *ngIf="role==userRolesEnum.Vendor"
+                id="add-btn1">Create
+        </button>
+        <button [disabled]="form.invalid" type="submit" class="btn btn-success" *ngIf="role==userRolesEnum.LocalAdmin"
+                id="add-btn">Create
+        </button>
+
+      </div>
+    </div>
+  </form>
+</ng-container>
+<!--End Modal -->

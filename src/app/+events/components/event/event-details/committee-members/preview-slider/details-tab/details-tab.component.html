@@ -1,0 +1,19 @@
+<div>
+    <div class="row py-2 px-2">
+        <div class="col-2">
+            <p class="text-dark">Full Name: </p>
+            <p class="text-dark">Role:</p>
+            <p class="text-dark">Mobile: </p>
+            <p class="text-dark">Email:</p>
+            <p class="text-dark">Address:</p>
+        </div>
+        <div class="col-8">
+            <p class="text-dark">{{user?.committeeMember?.name}}</p>
+            <p class="text-dark">{{user?.role | humanize}}</p>
+            <p class="text-dark">{{'(+' + user.phoneNumber.split('-')[0] + ')' + user.phoneNumber.split('-')[1]}}</p>
+            <p class="text-dark">{{user?.committeeMember?.email}}</p>
+            <p class="text-dark">{{user?.address?.gpsLocation?.formattedAddress ?? user?.address?.locationDescription}}</p>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,88 @@
+<div class="card" style="margin-bottom: 0.75rem;">
+  <div class="card-body">
+    <div class="d-flex align-items-center mb-2">
+      <h5 class="card-title flex-grow-1"><b>Location</b>
+        <div *ngIf="!editMode" class="badge bg-warning bg-smal fs-11" style="margin-left: 8px;">
+          {{locationType[selectedLocationType]}}
+        </div>
+      </h5>
+      <ng-container *ngIf="hasAllowedAction( allowedActions.Edit)">
+        <button [ngbTooltip]="'Edit'" *ngIf="!editMode" class="btn btn-sm" style="padding: 0;" (click)="onEditClick()">
+          <i class=" ri-edit-2-fill text-info fs-17"></i></button>
+
+      </ng-container>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <ng-container *ngIf="!editMode">
+          <ng-container *ngIf="selectedLocationType == locationType.onsite">
+            <location-description [url]="eventLocation?.gpsLocation?.url"
+              [description]="eventLocation?.locationDescription"></location-description>
+            <agm-map [zoom]="14" [latitude]="lat" [longitude]="lng" style="height: 300px !important;">
+              <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+            </agm-map>
+          </ng-container>
+          <ng-container *ngIf="selectedLocationType == locationType.online">
+            <location-description [url]="eventLocation?.locationLink"
+              [description]="eventLocation?.locationDescription"></location-description>
+          </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="editMode">
+          <form [formGroup]="updateLocationForm">
+            <div class="form-group" formGroupName="eventLocation">
+              <div class="mb-3">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="locationType" id="WithoutinlineRadio1"
+                    [value]="locationType.onsite" (change)="clearOnline()" formControlName="locationType">
+                  <label class="form-check-label" for="WithoutinlineRadio1">Onsite</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="locationType" id="WithoutinlineRadio2"
+                    [value]="locationType.online" (change)="clearOnsite()" formControlName="locationType">
+                  <label class="form-check-label" for="WithoutinlineRadio2">Online</label>
+                </div>
+              </div>
+
+              <div class="mb-3" *ngIf="isOnline">
+                <label class="form-label" for="event-location-link">Event
+                  Link</label>
+                <input [formControlValidator]="updateLocationForm.get('eventLocation.locationLink')" type="text"
+                  class="form-control" id="event-location-link" placeholder="Enter event link"
+                  formControlName="locationLink">
+                <arv-validation-messages for="locationLink"></arv-validation-messages>
+              </div>
+
+              <div class="mb-3" *ngIf="isOnsite">
+                <form [formGroup]="mapForm">
+                  <input [value]="address" class="form-control mb-2" placeholder="Enter location"
+                    formControlName="input" ngx-google-places-autocomplete #placesRef="ngx-places"
+                    (onAddressChange)="handleAddressChange($event)" />
+                </form>
+                <agm-map [zoom]="14" [latitude]="lat" [longitude]="lng" style="height: 300px !important;">
+                  <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+                </agm-map>
+              </div>
+
+              <div class="form-group">
+                <label for="locationDescription" class="form-label">Description</label>
+                <textarea class="form-control" id="locationDescription" formControlName="locationDescription"
+                  rows="3"></textarea>
+                <arv-validation-messages for="locationDescription"></arv-validation-messages>
+              </div>
+
+            </div>
+          </form>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer" *ngIf="editMode">
+    <button class="btn btn-soft-success btn-sm float-end" [disabled]="ValidateLocationForm()" (click)="onSaveClick()">
+      Save
+    </button>
+    <button class="btn btn-soft-info btn-sm float-end" style="margin-right: 5px;" (click)="onCancelClick()"> Cancel
+    </button>
+  </div>
+</div>

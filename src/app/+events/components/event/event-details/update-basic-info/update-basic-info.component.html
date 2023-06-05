@@ -1,0 +1,107 @@
+<!-- Order Create Model -->
+<ng-container #content role="document">
+  <div class="modal-header bg-light p-3">
+    <h5 class="modal-title" id="addModal"> Edit Event</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+      (click)="modalService.close()"></button>
+  </div>
+  <form (ngSubmit)="submit()" [formGroup]="form">
+    <div class="modal-body">
+      <div class="row gy-4 mb-3">
+        <div class="col-md-6 form-group">
+          <label for="amount-field" [redStar]="form.get('name')" class="form-label">Event Name</label>
+          <input [formControlValidator]="form.get('name')" type="text" id="customername-field" class="form-control"
+            placeholder="Enter First Name" formControlName="name" />
+          <arv-validation-messages for="name">
+          </arv-validation-messages>
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="eventTypeId" class="form-label" [redStar]="form.get('eventTypeId')">Event
+            Type</label>
+          <ng-select [items]="eventTypes" bindLabel="name" bindValue="id" #selectEventType id="eventTypeId"
+            formControlName="eventTypeId" placeholder="Select Event Type">
+            <ng-template ng-option-tmp let-item="item" let-index="index">
+              <b>{{item.name}}</b>
+            </ng-template>
+          </ng-select>
+          <arv-validation-messages for="eventTypeId">
+          </arv-validation-messages>
+        </div>
+        <div class="col-md-6 form-group">
+          <label class="form-label" [redStar]="form.get('startDateTime')">Start Date</label>
+          <input class="form-control flatpickr-input" type="text" placeholder="Enter start date" mwlFlatpickr
+            [enableTime]="true" [altInput]="true" [altFormat]="'F j, Y h:i K'" [convertModelValue]="true"
+            [dateFormat]="'Y-m-d H:i'" #startDateTemp formControlName="startDateTime"
+            [formControlValidator]="form.get('startDateTime')">
+          <arv-validation-messages for="startDateTime"></arv-validation-messages>
+        </div>
+        <div class="col-md-6 form-group">
+          <label class="form-label" [redStar]="form.get('endDateTime')">End Date</label>
+          <input class="form-control flatpickr-input" type="text" placeholder="Enter end date" mwlFlatpickr
+            [enableTime]="true" [altInput]="true" [altFormat]="'F j, Y h:i K'" [convertModelValue]="true"
+            [dateFormat]="'Y-m-d H:i'" #endDateTemp formControlName="endDateTime"
+            [formControlValidator]="form.get('endDateTime')">
+          <arv-validation-messages for="endDateTime">
+          </arv-validation-messages>
+        </div>
+
+
+        <div class="row my-3">
+          <h6 class="text-dark">Expiration Period <span class="text-danger">*</span></h6>
+          <div class="col-lg-6">
+            <div class="mb-3 mb-lg-0">
+              <label for="days" class="form-label" [redStar]="form.get('days')">Day</label>
+              <ng-select [items]="days" id="days"
+                formControlName="days" placeholder="Select Day">
+                <ng-option *ngFor="let item of days; let i=index;" [value]="item">{{item}}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="mb-3 mb-lg-0">
+              <label for="hours" class="form-label" [redStar]="form.get('hours')">Hour</label>
+              <ng-select [items]="hours" id="hours"
+                formControlName="hours" placeholder="Select Hour">
+                <ng-option *ngFor="let item of hours; let i=index;" [value]="item">{{item}}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+          <span *ngIf="(form.get('days').value == null || form.get('days').value == 0) && (form.get('hours').value == null || form.get('hours').value == 0) && (form.get('hours').touched || form.get('days').touched)" 
+        class="text-danger" style="font-size: 0.875em;">At least one value is required</span>
+        </div>
+
+
+        <div class="col-md-12 form-group">
+          <div class="profile-user border rounded position-relative d-inline-block mx-auto w-100  mb-4"
+            style="border-width: 3px !important;">
+            <img [src]="eventBasicInfo?.coverImageUrl| secure | async" #imageTag default-image
+              class="w-100 rounded user-profile-image" alt="user-profile-image">
+            <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+              <input id="profile-img-file-input" type="file" class="profile-img-file-input" hidden accept="image/*"
+                (change)="onImageChange($event, imageTag)">
+              <label for="profile-img-file-input" class="profile-photo-edit avatar-xs"
+                style="right: 5px !important; bottom: 1px !important;">
+                <span class="avatar-title rounded bg-light text-body">
+                  <i class="ri-camera-fill"></i>
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal"
+        (click)="modalService.close()">Cancel
+        </button>
+        <button [disabled]="form.invalid || form.pristine || ((form.get('days').value == null || form.get('days').value == 0) && (form.get('hours').value == null || form.get('hours').value == 0))"
+        type="submit" class="btn btn-success" id="add-btn">Save
+        </button>
+
+      </div>
+    </div>
+  </form>
+</ng-container>
+<!--End Modal -->

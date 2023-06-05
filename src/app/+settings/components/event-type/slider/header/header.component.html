@@ -1,0 +1,14 @@
+<div class="row ml-2">
+    <div class="col-2">
+        <p class=" f-14 py-1"><b>Name: </b></p>
+        <p class=" f-14 py-1"><b>Created Date: </b></p>
+        <p class=" f-14 py-1"><b>Created By: </b></p>
+        <p class=" f-14 py-1"><b>Description: </b></p>
+    </div>
+    <div class="col-10">
+        <p class="text-dark f-14 py-1">{{eventType?.name}}</p>
+        <p class="text-dark f-14 py-1">{{presentDate(eventType?.createdDate)}}</p>
+        <p class="text-dark f-14 py-1">{{eventType?.createdBy?.name}}</p>
+        <p class="text-dark f-14 py-1">{{eventType?.description}}</p>
+    </div>
+</div>

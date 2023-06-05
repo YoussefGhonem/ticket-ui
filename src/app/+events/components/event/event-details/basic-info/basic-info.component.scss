@@ -1,0 +1,9 @@
+.bg-image {
+  object-fit: contain;
+  background: #212529;
+}
+
+::ng-deep .badge-soft-secondary {
+  color: #9599ad !important;
+  background-color: #e7e7ea !important;
+}

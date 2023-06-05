@@ -1,0 +1,105 @@
+<div class="row" [formGroup]="form">
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-9">
+        <div class="search-box">
+          <input type="text" formControlName="searchWord" class="form-control " placeholder="Search"
+            id="custom-control">
+          <i class="ri-search-line search-icon"></i>
+          <div class="search-button" (click)="membersToggleSearch()">
+            <i *ngIf="!dropdownOpen" class="ri-equalizer-line custom-search-icon d-flex flex-row-reverse text-dark"><span
+                style="padding-bottom: 2px; padding-right: 3px;font-family: sans-serif;font-size: medium;">Filters</span>
+            </i>
+            <i *ngIf="dropdownOpen" [ngbTooltip]="'Close'"
+              class="ri-equalizer-line custom-search-icon d-flex flex-row-reverse text-dark"></i>
+          </div>
+          <i *ngIf="chowDeleteIcon()" (click)="clearSearchBar()"
+          class="ri-close-line custom-delete-search-icon d-flex flex-row-reverse"> </i>
+        </div>
+      </div>
+
+      <!-- Export -->
+
+      <div class="col-lg-3">
+        <div style="margin-bottom:7px;color: #3577F1; border-radius: 4px;">
+          <div class="text-end">
+            <div>
+              <button [disabled]="hasMembers == false" style="width: 130px; height: 43px" type="button"
+                class="btn btn-info" (click)="export()"> <i class="ri-file-excel-2-line align-bottom me-1"></i>
+                Export
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-7 col-sm-12" [formGroup]="form">
+    <ul class="members-dropdown-list" aria-expanded="true" role="listbox" [ngClass]="{'dropdown-open' : dropdownOpen}"
+      #toggle>
+      <div class="modal-body">
+        <div class="row gy-4 mb-3">
+
+          <div class="row m-2">
+            <div class="col-3">
+              <label>Status:
+              </label>
+            </div>
+            <div class="col-9">
+              <ng-select *ngxPermissionsOnly="[localAdminRole, superAdminRole]" [clearable]="true" bindLabel="name"
+                bindValue="id" id="vendorId" formControlName="isActive" placeholder="Select Status">
+                <ng-option [value]="''"> <b>All</b></ng-option>
+                <ng-option [value]="true"> <b>Active</b></ng-option>
+                <ng-option [value]="false"> <b>Inactive</b></ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="row m-2">
+            <div class="col-3">
+              <label>Locked
+              </label>
+            </div>
+            <div class="col-9">
+              <ng-select *ngxPermissionsOnly="[localAdminRole, superAdminRole]" [clearable]="true" bindLabel="name"
+                bindValue="id" id="vendorId" formControlName="isLock" placeholder="Select Status">
+                <ng-option [value]="''"> <b>All</b></ng-option>
+                <ng-option [value]="true"> <b>Locked</b></ng-option>
+                <ng-option [value]="false"> <b>Unlocked</b></ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+
+          <div class="row m-2">
+            <div class="col-3">
+              <label>Created Date:
+              </label>
+            </div>
+            <div class="col-9">
+              <input class="form-control flatpickr-input" type="text" placeholder="Enter start date" mwlFlatpickr
+                [enableTime]="true" [altInput]="true" [altFormat]="'F j, Y h:i K'" [convertModelValue]="true"
+                [dateFormat]="'F j, Y H:i K'" formControlName="createdDate">
+              <i *ngIf="form.get('createdDate').value !== null" (click)="clearCreatedDate()"
+                class="ri-close-line custom-delete-date-icon d-flex flex-row-reverse"> </i>
+            </div>
+          </div>
+
+          <div class="text-end">
+            <div class="d-flex gap-1 justify-content-end">
+              <button type="button" class="btn btn-light w-sm" (click)="clear()">Clear
+                Filter
+              </button>
+              <button type="button" (click)="search()" class="btn btn-success w-sm">Search</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ul>
+
+  </div>
+</div>

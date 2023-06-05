@@ -1,0 +1,24 @@
+<!-- Order Create Model -->
+<ng-container #content role="document">
+  <div class="modal-header bg-light p-3">
+    <h5 class="modal-title">{{title}}
+
+      <lord-icon (click)="downloadPdf()" class="cursor-pointer" [ngbTooltip]="'Download'"
+        src=" https://assets3.lottiefiles.com/packages/lf20_5gfiaktn.json" trigger="loop" colors="primary:#0ab39c">
+      </lord-icon>
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+      (click)="modalService.close()"></button>
+  </div>
+  <div class="text-center mb-3">
+    <div id="outerContainer">
+      <div class="pdf-container">
+        <pdf-viewer [src]="src" [rotation]="0" [original-size]="false" [show-all]="true" [fit-to-page]="false"
+          [zoom]="0.95" [zoom-scale]="'page-width'" [stick-to-page]="false" [render-text]="true"
+          [external-link-target]="'blank'" [autoresize]="true" [show-borders]="false"
+          style="width: 100%; height: 600px;"></pdf-viewer>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<!--End Modal -->

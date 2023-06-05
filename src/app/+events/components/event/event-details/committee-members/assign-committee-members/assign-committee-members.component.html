@@ -1,0 +1,69 @@
+<!-- Order Create Model -->
+<ng-container #content role="document">
+  <div class="modal-header bg-light p-3">
+    <h5 class="modal-title" id="addModal">Event Members</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+      (click)="modalActiveService.close()"></button>
+  </div>
+  <div class="card  m-3">
+    <div class="card-header" [formGroup]="searchForm">
+      <div class="d-sm-flex align-items-center">
+        <div class="col-xxl-12 col-sm-12">
+          <div class="search-box" style="margin-right: 2%;">
+            <input type="text" class="form-control" formControlName="searchWord"
+              placeholder="Search for name or email">
+            <i class="ri-search-line search-icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body apply-scroll" *ngIf="committeeMembers?.length>0;else emptyTemp">
+      <div class="row mt-3" *ngFor="let item of committeeMembers;let i= index">
+        <div class="flex-shrink-0  mt-sm-0">
+          <div class="d-flex gap-1">
+            <div style="margin-top: 1%;">
+              <input [checked]="patchCommitteeMembers(item.id)" class="form-check-input mt-2 mt-sm-0" type="checkbox"
+                name="checkAll" value="{{item.id}}" (change)="onCheckboxChange(item,$event)">
+            </div>
+            <div class="flex-shrink-0" style="margin-left: 3%;">
+              <div>
+                <img [src]="item?.imageUrl | secure | async" alt="" class="mr-75 rounded-circle" default-image
+                  height="40" width="40">
+                <div class="d-inline-block">
+                  <span>{{item?.name | truncate : 15 :'...'}}</span>
+                  <br>
+                  <span class="text-muted">{{item?.email | truncate : 15 :'...'}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--end card-->
+  <div class="modal-footer">
+    <div class="hstack gap-2 justify-content-end">
+      <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modalActiveService.close()">Close
+      </button>
+      <button (click)="submit()" type="submit" class="btn btn-warning" id="add-btn1">
+        <i class="ri-edit-box-line  me-1 align-bottom"></i> Assign
+      </button>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #emptyTemp>
+  <div class="tab-pane" id="productnav-draft" role="tabpanel">
+    <div class="py-4 text-center">
+      <div>
+        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+          colors="primary:#405189,secondary:#0ab39c" style="width:72px;height:72px">
+        </lord-icon>
+      </div>
+      <div class="mt-4">
+        <h5>Sorry! No Result Found</h5>
+      </div>
+    </div>
+  </div>
+</ng-template>

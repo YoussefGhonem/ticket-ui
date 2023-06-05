@@ -1,0 +1,12 @@
+<div class="profile-timeline order-status">
+    <ngb-accordion #acc="ngbAccordion" activeIds="0" [closeOthers]="true">
+        <ngb-panel *ngFor="let item of userAudits; let i = index" id="{{i}}" [disabled]="isExpandable(item) == false">
+            <ng-template ngbPanelTitle>
+                <member-activity-item-title [activity]="item"></member-activity-item-title>
+            </ng-template>
+            <ng-template ngbPanelContent>
+                <member-activity-item-content [activity]="item"></member-activity-item-content>
+            </ng-template>
+        </ngb-panel>
+    </ngb-accordion>
+</div>

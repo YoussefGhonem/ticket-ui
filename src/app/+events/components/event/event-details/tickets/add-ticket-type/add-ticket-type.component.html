@@ -1,0 +1,142 @@
+<!-- Order Create Model -->
+<ng-container #content role="document">
+  <div class="modal-header bg-light p-3">
+    <h5 class="modal-title" id="addModal">New Ticket Type</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+      (click)="modalService.close()"></button>
+  </div>
+  <form [formGroup]="form">
+    <div class="modal-body">
+      <div class="row gy-4 mb-3">
+        <div class="col-md-12 form-group">
+          <div class="col-md-12 mb-2">
+            <ng-container *ngTemplateOutlet="accordion"></ng-container>
+          </div>
+          <label for="amount-field" [redStar]="form.get('title')" class="form-label">Title</label>
+          <input [formControlValidator]="form.get('title')" type="text" id="customername-field" class="form-control"
+            placeholder="Enter Ticket Title" formControlName="title" />
+          <arv-validation-messages for="title">
+          </arv-validation-messages>
+        </div>
+        <div class="col-md-4 form-group">
+          <label for="amount-field" [redStar]="form.get('price')" class="form-label">Ticket Price</label>
+          <input [formControlValidator]="form.get('price')" type="number" id="customername-field" class="form-control"
+            placeholder="Enter price" formControlName="price" />
+          <arv-validation-messages for="price">
+          </arv-validation-messages>
+
+          <label id="sign" class="text-dark">+</label>
+        </div>
+        <div class="col-md-4 form-group">
+          <label for="amount-field" class="form-label">Fees</label>
+          <input type="text" disabled [value]="getPercentage()" class="form-control" />
+          <label id="sign" class="text-dark">=</label>
+        </div>
+        <div class="col-md-4 form-group">
+          <label class="form-label">Total Price</label>
+          <input disabled type="number" [value]="getTotalPrice()" class="form-control" />
+
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="amount-field" [redStar]="form.get('quantity')" class="form-label">Quantity</label>
+          <input [formControlValidator]="form.get('quantity')" type="text" class="form-control"
+            placeholder="Enter quantity" formControlName="quantity" />
+          <arv-validation-messages for="quantity">
+          </arv-validation-messages>
+        </div>
+        <div class="col-md-6 form-group" *ngIf="!form.getRawValue().approvalEnabled">
+          <label for="amount-field" [redStar]="form.get('maxTicketsPerPurchase')" class="form-label">Limit Quantity Per
+            Purchase</label>
+          <input [formControlValidator]="form.get('maxTicketsPerPurchase')" type="text" class="form-control"
+            placeholder="Enter limit per purchase" formControlName="maxTicketsPerPurchase" />
+          <arv-validation-messages for="maxTicketsPerPurchase">
+          </arv-validation-messages>
+          <span class="text-danger" style="font-size:0.875em ;" *ngIf="form.get('maxTicketsPerPurchase').touched && (form.get('maxTicketsPerPurchase').value == null || form.get('maxTicketsPerPurchase').value == '') && form.get('approvalEnabled').value == false"> Max Purchase is required</span>
+          <span class="text-danger" style="font-size:0.875em ;" *ngIf="validateMaxTickets"> Max tickets per purchase
+            must be less than or equal
+            total quantity</span>
+          
+        </div>
+
+        <div class="col-md-6 form-group" *ngIf="form.getRawValue().approvalEnabled">
+          <label for="amount-field" [redStar]="form.get('maxTicketsPerPurchase')" class="form-label">Limit Tickets Per
+            Purchase</label>
+          <input type="text" class="form-control" disabled
+            placeholder="Enter limit per purchase" value="No Limits" />
+        </div>
+
+
+        <div class="col-md-12">
+          <label class="form-label">Customers</label>
+
+          <div class="input-group">
+            <input type="text" class="form-control" (keyup.enter)="addEmail()" formControlName="email"
+              placeholder="Enter an Email" [formControlValidator]="form.get('email')">
+            <button [disabled]="form?.get('email')?.errors" (click)="addEmail()" class="btn btn-outline-primary"
+              type="button">Add
+            </button>
+          </div>
+          <arv-validation-messages for="email">
+          </arv-validation-messages>
+        </div>
+        <div class="col-md-12" *ngIf="clientsEmails?.length > 0">
+
+          <ngx-simplebar class="email-list">
+            <table class="table table-striped table-sm">
+              <tbody>
+                <tr *ngFor="let item of clientsEmails; let i = index">
+                  <td>
+                    <i class="ri-mail-line me-2 align-middle text-muted fs-16"></i>{{clientsEmails[clientsEmails.length - 1 - i]}}
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-soft-danger btn-icon btn-sm float-end" (click)="deleteEmail(clientsEmails.length - 1 - i)"
+                      style="margin-left: 5px;"><i class=" ri-delete-bin-6-line"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </ngx-simplebar>
+        </div>
+
+
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modalService.close()">Cancel
+        </button>
+        <button [disabled]="form.invalid || validateMaxTickets || validValues()" (click)="submit()" type="button" class="btn btn-success"
+          id="add-btn">Save
+        </button>
+
+      </div>
+    </div>
+  </form>
+</ng-container>
+<!--End Modal -->
+
+
+<ng-template #accordion>
+  <!-- ngb Accordion starts -->
+  <div class="accordion-shadow">
+    <ngb-accordion [destroyOnHide]='false' [closeOthers]="true" (panelChange)='panelShadow($event, shadow)'
+      activeIds="panel2" #shadow>
+      <ngb-panel id="panel1">
+        <ng-template ngbPanelTitle>
+          <div class="d-flex">
+            <div class="flex-grow-1">+ Need Approval </div>
+            <div class="form-check form-switch form-switch-success">
+              <input click-stop-propagation (change)="onToggle()" [checked]="form.getRawValue().approvalEnabled"
+                class="form-check-input" type="checkbox" role="switch" id="SwitchCheck3">
+            </div>
+          </div>
+        </ng-template>
+        <ng-template ngbPanelContent>
+          When this toggle is on, this means that every request to this ticket type will need approval from
+          committee member, vendor, or vendor admin.
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+    <!-- ngb Accordion ends -->
+  </div>
+</ng-template>

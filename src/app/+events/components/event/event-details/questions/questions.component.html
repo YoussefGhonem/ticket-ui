@@ -1,0 +1,86 @@
+<div class="row">
+
+  <div class="offset-lg-2 col-lg-8 mt-3">
+
+    <ng-container>
+      <div class="card border rounded bg-soft-dark mt-3">
+        <div class="card-body">
+          <div class="d-flex align-items-center my-2">
+            <div class="card-title flex-grow-1 m-1">
+              <ng-container *ngTemplateOutlet="ticketsDropDown"></ng-container>
+            </div>
+            <button *ngIf="hasAllowedAction( allowedActions.Edit) && !addQuestion" [disabled]="!form.get('id').value"
+              class="btn btn-success" (click)="onAddClick()">
+              Add Question
+            </button>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="form.get('id').value === null">
+        <ng-container *ngTemplateOutlet="warning"></ng-container>
+      </ng-container>
+      <ng-container *ngIf="form.get('id').value !== null">
+        <add-question-card *ngIf="addQuestion" [questionNumber]="this.questions?.length + 1" [eventId]="eventId"
+          [eventAllowedAction]="eventAllowedAction" (notify)="onDoneClick()"
+          (loadNewDate)="loadQuestions();loadActivitiesEvent();" [ticketTypeId]="form.getRawValue()?.id ">
+        </add-question-card>
+        <ng-container *ngIf="questions?.length > 0; else emptyTemp">
+          <ng-container *ngFor="let question of questions; let i=index">
+            <question [eventBasicInfo]="eventBasicInfo" [question]="question" [eventId]="eventId"
+              (loadNewData)="loadQuestions();loadActivitiesEvent();" [eventAllowedAction]="eventAllowedAction"
+              [ticketTypeId]="form.getRawValue()?.id " [index]="i+1"></question>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+
+  </div>
+</div>
+
+<ng-template #emptyTemp>
+  <div class="tab-pane" id="productnav-draft" role="tabpanel">
+    <div class="py-4 text-center">
+      <div>
+        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+          colors="primary:#405189,secondary:#0ab39c" style="width:72px;height:72px">
+        </lord-icon>
+      </div>
+      <div class="mt-4">
+        <h5>Sorry! No Result Found</h5>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #ticketsDropDown>
+  <div class="align-items-center" [formGroup]="form">
+    <div class="form-group">
+      <ng-select style="width: 70%;" [items]="ticketTypes" bindLabel="title" bindValue="id" formControlName="id"
+        (change)="onDoneClick()" placeholder="Select Ticket Type" (clear)="onClear()">
+        <ng-template ng-label-tmp let-item="item" let-clear="clear">
+          <b [ngbTooltip]="item?.title">{{item.title | truncate : 30}}</b>
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item" let-index="index">
+          <b [ngbTooltip]="item?.title">{{item.title | truncate : 30}}</b>
+        </ng-template>
+      </ng-select>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #warning>
+  <!-- Warning Alert -->
+  <div class="alert alert-warning alert-dismissible alert-additional fade show mb-0" role="alert">
+    <div class="alert-body">
+      <div>
+        <div class="me-3 text-center" style="font-size: 100px;">
+          <i class="ri-alert-line align-middle"></i>
+        </div>
+        <div class="">
+          <h5 class="alert-heading text-center">Select Ticket Type</h5>
+          <p class="mb-0 text-center">You must select a ticket type to proceed with adding questions</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,110 @@
+<div class="profile-foreground position-relative mx-n4 mt-n4">
+  <div class="profile-wid-bg">
+    <img src="assets/images/top profile info.png" alt="" class="profile-wid-img" />
+  </div>
+</div>
+<div class="pt-4 mb-4 mb-lg-3 pb-lg-4">
+  <div class="row g-4">
+    <div class="col-md-1">
+      <div class="avatar-lg">
+        <img [src]="src | secure | async" default-image alt="user-img" class="img-thumbnail rounded-circle avatar-lg" />
+      </div>
+    </div><!--end col-->
+    <div class="col-md-11">
+      <div class="px-1 py-2 mt-3 d-flex">
+        <div class="w-100">
+          <h3 class="text-white mb-1">{{userInfo?.name}}</h3>
+        <p class="text-white-75">{{userInfo?.role | humanize}}</p>
+        </div>
+        <div class="flex-shrink-0">
+          <a routerLink="/users/profile-settings" class="btn btn-success"><i
+              class="ri-edit-box-line align-bottom"></i>
+            Edit Profile</a>
+        </div>
+      </div><!--end row-->
+    </div>
+
+    <div class="row mt-5" *ngIf="userInfo">
+      <div class="col-lg-12 mt-2">
+        <div>
+          <div class="d-flex">
+            <!-- Nav tabs -->
+            <div class="row w-100">
+              <div class="col-lg-4">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title mb-5">Complete Your Profile</h5>
+                    <div class="progress animated-progess custom-progress progress-label">
+                      <div class="progress-bar bg-danger" role="progressbar"
+                        [ngStyle]="{'width': completionPercentage + '%'}" [attr.aria-valuenow]="completionPercentage"
+                        aria-valuemin="0" aria-valuemax="100">
+                        <div class="label">{{completionPercentage}}%</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title mb-3">Info</h5>
+                    <div class="table-responsive">
+                      <table class="table table-borderless mb-0">
+                        <tbody>
+                          <tr>
+                            <th class="ps-0" scope="row">Full Name :</th>
+                            <td class="text-muted">{{userInfo.name}}</td>
+                          </tr>
+                          <tr>
+                            <th class="ps-0" scope="row">Phone Number :</th>
+                            <td class="text-muted" *ngIf="userInfo.phoneNumber">{{'(+' +
+                              userInfo.phoneNumber?.split('-')[0] + ')' + userInfo.phoneNumber?.split('-')[1]}}
+                            </td>
+                            <td *ngIf="!userInfo.phoneNumber">
+                              <u><a class="text-secondary" routerLink="/users/profile-settings"
+                                  style="cursor: pointer;">Add Number</a></u>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th class="ps-0" scope="row">E-mail :</th>
+                            <td class="text-muted">{{userInfo.email}}</td>
+                          </tr>
+                          <tr>
+                            <th class="ps-0" scope="row">Address :</th>
+                            <td class="text-muted" *ngIf="DoesAddressExist()">
+                              {{userInfo?.address?.gpsLocation?.formattedAddress ?? userInfo?.address?.locationDescription}}
+                            </td>
+                            <td *ngIf="!DoesAddressExist()">
+                              <u><a class="text-secondary" routerLink="/users/profile-settings"
+                                  style="cursor: pointer;">Add Address</a></u>
+                            </td>
+
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div><!-- end card body -->
+                </div><!-- end card -->
+
+              </div><!--end col-->
+              <div class="col-lg-8">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="card">
+                      <div class="card-header align-items-center d-flex">
+                        <h4 class="card-title mb-0  me-2">Recent Activity</h4>
+                      </div>
+                      <div class="card-body w-100">
+                        <audits-body [user]="userInfo"></audits-body>
+                      </div>
+                    </div><!-- end card -->
+                  </div><!-- end col -->
+                </div><!-- end row -->
+
+              </div><!--end col-->
+            </div><!--end row-->
+          </div>
+        </div>
+      </div><!--end col-->
+    </div><!--end row-->
+  </div>
+</div>

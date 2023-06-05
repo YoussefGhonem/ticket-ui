@@ -1,0 +1,39 @@
+<!-- Order Create Model -->
+<ng-container #content role="document">
+  <div class="modal-header bg-light p-3">
+    <h5 class="modal-title" id="addModal"> Increase Quantity</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+      (click)="modalService.close()"></button>
+  </div>
+  <form [formGroup]="form">
+    <div class="modal-body">
+      <div class="row gy-4 mb-3">
+        <div class="col-md-12 form-group text-center">
+          <button disabled type="button" class="btn rounded-pill btn-info waves-effect waves-light">Total tickets:
+            <b>{{ticketType?.totalTickets + form.getRawValue().quantity }}</b></button>
+        </div>
+        <div class="col-md-12 form-group">
+          <label for="amount-field" [redStar]="form.get('quantity')" class="form-label">Quantity</label>
+          <div class="input-step full-width">
+            <button type="button" class="minus" (click)="defaultfulldecrement()">–</button>
+            <input type="number" [formControlValidator]="form.get('quantity')" formControlName="quantity"
+              class="product-quantity" min="0" max="100" readonly>
+            <button type="button" class="plus" (click)="defaultfullincrement()">+</button>
+          </div>
+          <arv-validation-messages for="quantity">
+          </arv-validation-messages>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modalService.close()">Cancel
+        </button>
+        <button [disabled]="form.invalid" type="button" (click)="submit()" class="btn btn-success" id="add-btn">Save
+        </button>
+
+      </div>
+    </div>
+  </form>
+</ng-container>
+<!--End Modal -->

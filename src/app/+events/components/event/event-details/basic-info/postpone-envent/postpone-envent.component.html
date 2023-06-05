@@ -1,0 +1,86 @@
+<section>
+    <div class="modal-content">
+        <div class="modal-header">
+            <label>Postpone</label>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn-close"
+                (click)="modalService.close()"></button>
+        </div>
+        <div class="modal-body">
+            <div class="mt-2 text-start">
+                <form [formGroup]="eventForm">
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <div>
+                                <label class="form-label" [redStar]="eventForm?.get('startDateTime')">Start Date</label>
+                                <input class="form-control flatpickr-input" type="text" placeholder="Enter start date"
+                                    mwlFlatpickr [enableTime]="true" [altInput]="true" [altFormat]="'F j, Y h:i K'"
+                                    [convertModelValue]="true" [dateFormat]="'F j, Y H:i K'" #startDateTemp
+                                    formControlName="startDateTime"
+                                    [formControlValidator]="eventForm?.get('startDateTime')">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div>
+                                <label class="form-label" [redStar]="eventForm?.get('endDateTime')">End Date</label>
+                                <input class="form-control flatpickr-input" type="text" placeholder="Enter end date"
+                                    mwlFlatpickr [enableTime]="true" [altInput]="true" [altFormat]="'F j, Y h:i K'"
+                                    [minDate]="'today'" [convertModelValue]="true" [dateFormat]="'Y-m-d H:i'"
+                                    #endDateTemp formControlName="endDateTime"
+                                    [formControlValidator]="eventForm?.get('endDateTime')">
+                            </div>
+                        </div>
+                    </div>
+                    <div formGroupName="eventLocation">
+                        <div class="mb-3">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="locationType"
+                                    [value]="locationType.onsite" formControlName="locationType"
+                                    (change)="clearOnline()">
+                                <label class="form-check-label">Onsite</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="locationType"
+                                    [value]="locationType.online" formControlName="locationType"
+                                    (change)="clearOnsite()">
+                                <label class="form-check-label">Online</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3" *ngIf="isOnline">
+                            <label class="form-label" for="event-location-link">Event
+                                Link</label>
+                            <input [formControlValidator]="eventForm?.get('eventLocation.locationLink')" type="text"
+                                class="form-control" id="event-location-link" formControlName="locationLink"
+                                placeholder="Enter event link">
+                            <arv-validation-messages for="locationLink"></arv-validation-messages>
+                        </div>
+
+                        <div class="mb-3" *ngIf="isOnsite">
+                            <input class="form-control mb-2" placeholder="Search location" ngx-google-places-autocomplete
+                                #placesRef="ngx-places" (onAddressChange)="handleAddressChange($event)" />
+                            <!-- Google Maps-->
+                            <agm-map [zoom]="14" [latitude]="lat" [longitude]="lng">
+                                <agm-marker [latitude]="lat" [longitude]="lng" [markerDraggable]="true"></agm-marker>
+                            </agm-map>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="locationDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="locationDescription"
+                                formControlName="locationDescription" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="d-flex gap-2 justify-content-end mt-4 mb-2">
+                <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal"
+                    (click)="modalService.close()">Cancel
+                </button>
+                <button type="button" [disabled]="eventForm?.invalid || startDateLessOrEqual()" class="btn w-sm btn-danger" id="delete-product"
+                    (click)="postpone()">Postpone
+                </button>
+            </div>
+        </div>
+    </div>
+</section>

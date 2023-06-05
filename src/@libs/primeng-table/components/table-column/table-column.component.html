@@ -1,0 +1,26 @@
+<ng-container [ngTemplateOutletContext]="{
+          value: value
+        }" [ngTemplateOutlet]="valueTemp">
+</ng-container>
+
+<ng-template #valueTemp let-value=value>
+  <ng-container *ngIf="value != null  && value != undefined; else emptyValueTemp">
+    <span *ngIf="option.type === 'text'" container="body" ngbTooltip="{{value}}">
+      {{value| truncate: 12: '...'}}
+    </span>
+    <span *ngIf="option.type === 'number'">{{value| decimal}}</span>
+    <span *ngIf="option.type === 'int'">{{value | integer}}</span>
+    <span *ngIf="option.type === 'price'">{{value| price}}</span>
+    <span *ngIf="option.type === 'percent'">{{value| percent}}</span>
+    <span *ngIf="option.type === 'date'">{{value | date}}</span>
+    <span *ngIf="option.type === 'datetime'">{{value| datetime}}</span>
+    <span *ngIf="option.type === 'bool'">{{value ? 'Yes' : 'No'}}</span>
+    <span *ngIf="option.type === 'image'">
+      <img [src]="value" class="image" alt="img">
+    </span>
+  </ng-container>
+</ng-template>
+
+<ng-template #emptyValueTemp>
+  <span>-</span>
+</ng-template>

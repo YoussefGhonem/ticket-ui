@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+
+// this style belong to validation message
+.invalid-feedback {
+  display: inline !important;
+
+  p {
+    margin-bottom: 0 !important;
+  }
+}
+
+.icon-center {
+  margin: auto;
+  display: block;
+}

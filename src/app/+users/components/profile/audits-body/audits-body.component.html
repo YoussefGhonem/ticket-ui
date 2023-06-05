@@ -1,0 +1,64 @@
+<div #body>
+
+    <ng-container *ngTemplateOutlet="filter"></ng-container>
+
+    <ngx-simplebar [ngStyle]="{'max-height': '57vh' }" class="px-3" #cardBody>
+        <user-audits [userAudits]="userAudits"></user-audits>
+    </ngx-simplebar>
+</div>
+
+
+
+<ng-template #filter>
+    <div class="row mb-3 px-3" [formGroup]="form">
+        <div class="col-lg-7 col-sm-12" #closeDropdown>
+            <div class="search-box border rounded border-light">
+                <input type="text" formControlName="title" class="form-control border" placeholder="Search By Title"
+                    id="custom-control">
+                <i class="ri-search-line search-icon"></i>
+
+                <div class="search-button" (click)="toggleSearch()" #openAgain>
+                    <i *ngIf="!dropdownOpen" class="ri-equalizer-line custom-search-icon d-flex flex-row-reverse text-dark"><span
+                            style="padding-bottom: 2px; padding-right: 3px;font-family: sans-serif;font-size: medium;">Filters</span>
+                    </i>
+                    <i *ngIf="dropdownOpen" [ngbTooltip]="'Close'" #closeAgain
+                        class="ri-close-line custom-search-icon d-flex flex-row-reverse text-dark"></i>
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <div [formGroup]="form">
+                    <ul class="dropdown-list" aria-expanded="true" role="listbox" #toggle
+                        [ngClass]="{'dropdown-open' : dropdownOpen}">
+                        <div class="modal-body mx-2">
+                            <div class="row">
+
+                                <div class="col-md-6 form-group mx-3">
+                                    <label for="Last-field" class="form-label">Date
+                                    </label>
+                                    <input class="form-control flatpickr-input" formControlName="from" type="text"
+                                        mwlFlatpickr [altInput]="true" [convertModelValue]="true" mode="range"
+                                        placeholder="From-To">
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="text-end mx-2">
+                            <div class="d-flex gap-1 justify-content-end">
+                                <button type="button" class="btn btn-light w-sm" (click)="clear()">Clear
+                                    Filter
+                                </button>
+                                <button type="button" (click)="search()" class="btn btn-success w-sm">Search
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Info Alert -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

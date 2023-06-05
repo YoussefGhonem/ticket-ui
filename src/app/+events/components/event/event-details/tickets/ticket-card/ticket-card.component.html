@@ -1,0 +1,84 @@
+<div class="card">
+  <div class="card-body" style="height: 197px;">
+    <div class="pt-3 mt-n3 mx-n3 rounded-top">
+      <div class="d-flex flex-row-reverse justify-content-between my-n2">
+        <div class="dropdown" ngbDropdown *ngIf=" hasEventAllowedAction(eventAllowedAction.Edit) || hasEventAllowedAction(eventAllowedAction.EditWhenPublished)">
+          <button class="btn btn-link text-muted mt-n2  text-decoration-none fs-15 arrow-none" data-bs-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="true" ngbDropdownToggle>
+            <i-feather name="more-horizontal" class="icon-sm"></i-feather>
+          </button>
+
+          <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+            <a *ngIf="hasTicketTypeAllowedAction(ticketTypeAllowedAction.Edit) &&
+            hasEventAllowedAction(eventAllowedAction.Edit)" class="dropdown-item" (click)="onClickUpdate()"><i
+                class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit</a>
+            <a *ngIf="hasTicketTypeAllowedAction(ticketTypeAllowedAction.IncreaseQuantity) &&
+                hasEventAllowedAction(eventAllowedAction.EditWhenPublished)" class="dropdown-item"
+              data-bs-toggle="modal" data-bs-target="#removeProjectModal" (click)="onClickShowIncreaseQuantity()">
+              <i class="ri-arrow-up-fill align-bottom me-2 text-muted"></i> Increase Quantity</a>
+            <a *ngIf="hasTicketTypeAllowedAction(ticketTypeAllowedAction.AddNewInvitedClients) &&
+                hasEventAllowedAction(eventAllowedAction.EditWhenPublished)" class="dropdown-item"
+              data-bs-toggle="modal" data-bs-target="#removeProjectModal" (click)="onClickShowInviteNewClients()">
+              <i class="ri-user-add-fill align-bottom me-2 text-muted"></i> Add New Invites</a>
+
+            <ng-container *ngIf="hasTicketTypeAllowedAction(ticketTypeAllowedAction.Delete) &&
+              hasEventAllowedAction(eventAllowedAction.Edit)">
+              <div class="dropdown-divider"></div>
+              <a *ngIf="hasTicketTypeAllowedAction(ticketTypeAllowedAction.Delete) &&
+              hasEventAllowedAction(eventAllowedAction.Edit)" class="dropdown-item text-danger"
+                (click)="onClickDelete()" data-bs-toggle="modal" data-bs-target="#removeProjectModal"><i
+                  class="ri-delete-bin-fill align-bottom me-2 text-danger"></i>
+                Delete</a>
+            </ng-container>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="py-3">
+      <div class="row">
+        <div class="col-6">
+          <h5 class="fs-14 mb-3 text-hover" container="body"><a [ngbTooltip]="ticketType.title"
+            href="javascript:void(0)" class="text-dark text-hover">
+              <b>{{ticketType.title | truncate
+                :30:'...'}}</b></a>
+          </h5>
+        </div>
+        <div class="col-6 d-flex flex-row-reverse">
+          <h5 class="fs-14 mb-3 text-hover" container="body"><b>{{ticketType.totalPrice | price}}</b>
+          </h5>
+        </div>
+        <div class="col-12">
+          <div class="d-flex mb-2">
+            <div class="flex-grow-1">
+              <div>
+                <h5 class="fs-14 mb-1 text-hover" container="body">Purchased</h5>
+              </div>
+            </div>
+            <div class="flex-shrink-0">
+              <div>{{ticketType.purchasedTickets || 0}} / {{ticketType.totalTickets || 'Unlimited'}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div>
+      <div class="mt-auto">
+        <div class="progress-sm animated-progess">
+          <ngb-progressbar [value]="((ticketType.purchasedTickets) / ticketType.totalTickets) * 100 " type="success"
+            class="progress-sm">
+          </ngb-progressbar>
+        </div><!-- /.progress -->
+      </div>
+    </div>
+  </div>
+  <div class="card-footer d-flex">
+    <img style="margin-right: 10px;" [src]="ticketType?.createdBy?.imageUrl | secure | async" alt=""
+      class="rounded-circle flex-shrink-0" default-image height="20" width="20">
+    <p class="text-mute flex-grow-1">Create By {{ticketType.createdBy.name}}</p>
+    <p class="text-mute">{{presentDate(ticketType.createdDate)}}</p>
+  </div>
+</div>

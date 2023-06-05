@@ -1,0 +1,97 @@
+<div class="row mt-2" *ngIf="events?.length > 0; else emptyTemp">
+  <div class="col-lg-6 col-md-4 col-sm-8 project-card" *ngFor="let data of events" id="pl1_{{data.id}}">
+    <div class="card" style="min-height:80px;">
+      <div class="card-body">
+        <div class="pt-3 mt-n3 mx-n3  bg-soft-{{getBackGroundColor(data.status)}} rounded-top">
+          <div class="d-flex justify-content-between my-n2">
+            <p class="pt-2 cursor-pointer" style="margin-left: 21px;" [ngbTooltip]="'Created'"><span class="text-info ">
+                <i class="ri-calendar-2-line align-bottom cursor-pointer"></i> {{data.createdDate |
+                  datetime}}</span> , by {{data.createdBy.name |  humanize}}</p>
+
+            <button type="button" class="btn avatar-xs p-0 favourite-btn heart_icon_{{data.id}}"
+              [ngClass]="{'active': true}">
+            </button>
+            <div class="dropdown" ngbDropdown>
+              <button class="btn btn-link text-muted mt-n2  text-decoration-none fs-15 arrow-none"
+                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ngbDropdownToggle>
+                <i name="more-horizontal" class="ri-more-fill"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                <a class="dropdown-item" routerLink="/events/{{data.id}}">
+                  <i class="ri-eye-fill align-bottom ri-md p-1 text-primary"></i> Details </a>
+              </div>
+            </div>
+
+          </div>
+          <div class="text-center cursor-pointer" routerLink="/events/{{data.id}}">
+            <img *ngIf="data?.coverImageUrl != null" [src]="data?.coverImageUrl | secure | async" default-image alt=""
+              class="custom-image">
+
+            <img [ngbTooltip]="'Not Found Cover Image'" *ngIf="data?.coverImageUrl == null"
+              src="https://i.ibb.co/2h4FcdF/no-product.png" default-image alt="" class="custom-image">
+          </div>
+        </div>
+
+        <div class="py-3" style="min-height:80px;">
+          <h5 class="fs-14 mb-3 text-hover" [ngbTooltip]="data.name" container="body"><a
+              routerLink="/events/{{data.id}}" class="text-dark text-hover">{{data.name | truncate
+                :30:'...'}}
+            </a>
+            <div class="mt-1">
+              {{data?.reference}}
+            </div>
+          </h5>
+
+          <div class="row gy-3">
+            <div class="col-6">
+              <div>
+                <p class="text-muted mb-1">Type</p>
+                <h5 class="fs-14">{{data.typeName}}</h5>
+              </div>
+            </div>
+            <div class="col-6">
+              <div>
+                <p class="text-muted mb-1">Status</p>
+                <div class="custom-status-color" *ngIf="data?.status == eventStatusEnum.Draft"
+                  [eventStatusBadge]="data?.status"></div>
+
+                <div *ngIf="data?.status != eventStatusEnum.Draft" [eventStatusBadge]="data?.status">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row gy-3">
+            <div class="col-6">
+              <div>
+                <p class="text-muted mb-1">From</p>
+                <h5 class="fs-13">{{data?.startDate |datetime}}</h5>
+              </div>
+            </div>
+            <div class="col-6">
+              <div>
+                <p class="text-muted mb-1">To</p>
+                <h5 class="fs-13">{{data?.endDate | datetime}}</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #emptyTemp>
+  <div class="tab-pane" id="productnav-draft" role="tabpanel">
+    <div class="py-4 text-center">
+      <div>
+        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+          colors="primary:#405189,secondary:#0ab39c" style="width:72px;height:72px">
+        </lord-icon>
+      </div>
+      <div class="mt-4">
+        <h5>Sorry! No Result Found</h5>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,12 @@
+<vendor-admin-tab-filter [form]="form" (notify)="loadVendorAdmins()" [user]="vendorId">
+
+</vendor-admin-tab-filter>
+
+<vendor-admin-tab-table [form]="form" [user]="vendorId" ></vendor-admin-tab-table>
+
+
+<div style="margin-bottom: 1%" *ngIf="vendorAdmins?.length > 0">
+    <app-pagination (pageChange)="pageChange($event)" [pageNumber]="form.getRawValue().pageNumber"
+      [pageSize]="form.getRawValue().pageSize" [total]="total">
+    </app-pagination>
+  </div>

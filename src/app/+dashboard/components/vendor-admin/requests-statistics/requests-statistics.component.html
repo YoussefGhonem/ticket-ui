@@ -1,0 +1,44 @@
+<div class="card">
+    <div class="card-header align-items-center " [formGroup]="form">
+        <div class="border-0 align-items-center d-flex">
+            <h4 class="card-title mb-0 flex-grow-1">Requests </h4>
+            <div class="d-flex gap-1">
+                <button title="Weekly" (click)="onFrequencyChange(frequencyEnum.Week)" type="button"
+                    class="btn btn-soft-success btn-sm">
+                    W
+                </button>
+                <button title="Monthly" (click)="onFrequencyChange(frequencyEnum.Month)" type="button"
+                    class="btn btn-soft-success btn-sm">
+                    M
+                </button>
+                <button title="Quarter" (click)="onFrequencyChange(frequencyEnum.Quarter)" type="button"
+                    class="btn btn-soft-success btn-sm">
+                    Q
+                </button>
+                <div class="select-dropdown">
+                    <select formControlName="year">
+                        <option selected hidden [value]="null">Y</option>
+                        <option *ngFor="let item of years" value="{{item}}">{{item}}</option>
+                    </select>
+                </div>
+            </div>
+        </div><br>
+        <div class="dropdown card-header-dropdown" ngbDropdown>
+            <ng-select (keyup)="onSearchChange($event)" [items]="events" bindLabel="name" bindValue="id"
+                formControlName="eventId" placeholder="All Events">
+                <ng-template ng-option-tmp let-item="item" let-index="index">
+                    <b>{{item.name}}</b>
+                </ng-template>
+            </ng-select>
+        </div>
+    </div>
+    <div class="card-body pb-0">
+        <div class="mb-n3">
+            <apx-chart [series]="series" [chart]="salesForecastChart.chart" [colors]="salesForecastChart.colors"
+                [dataLabels]="salesForecastChart.dataLabels" [plotOptions]="salesForecastChart.plotOptions"
+                [yaxis]="salesForecastChart.yaxis" [legend]="salesForecastChart.legend" [fill]="salesForecastChart.fill"
+                [stroke]="salesForecastChart.stroke" [tooltip]="salesForecastChart.tooltip"
+                [xaxis]="salesForecastChart.xaxis"></apx-chart>
+        </div>
+    </div>
+</div><!-- end card -->

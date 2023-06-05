@@ -1,0 +1,41 @@
+<div class="card p-3">
+  <div class="card-body">
+    <div class="d-flex align-items-center mb-3 pb-2 border-bottom">
+      <h5 class="card-title flex-grow-1"><b>Question {{questionNumber}}</b></h5>
+    </div>
+    <form [formGroup]="form">
+      <div class="form-group border-bottom mb-3">
+        <textarea [formControlValidator]="form.get('question')" class="form-control bg-light text-mute" formControlName="question"></textarea>
+        <arv-validation-messages for="question"></arv-validation-messages>
+      </div>
+      <div class="form-group my-3">
+        <label class="form-label">Options</label>
+        <ng-container formArrayName="choices">
+          <ng-container *ngFor="let item of Choices?.controls; let i = index">
+          <div class="d-flex my-2">
+            <input disabled class="form-check-input radio" type="radio" name="inlineRadioOptions" [id]="'choice' + i"
+              [value]="item.value">
+            <input [formControlValidator]="getChoice(i)" [placeholder]="'option ' + (i+1)" style="font-size: 13px;" class="form-control form-control-sm" [formControl]="getChoice(i)" type="text"
+              (click)="onClickFocus($event)" />
+            <button class="btn btn-sm" style="margin-left: 5px;"
+              *ngIf="hasAllowedAction( allowedActions.Edit)" (click)="deleteChoice(i)">
+              <i class=" ri-close-line fs-16"></i></button>
+          </div>
+          <arv-validation-messages [for]="getChoice(i)"></arv-validation-messages>
+        </ng-container>
+          <div class="form-check my-2">
+            <input class="form-check-input" disabled type="radio" [id]="'choice'" value="option1">
+            <label class="form-check-label text-info" (click)="addChoice()"><u>Add Option</u></label>
+          </div>
+        </ng-container>
+      </div>
+    </form>
+  </div>
+
+  <div class="card-footer">
+    <button [disabled]="form.invalid || validate() || form.pristine" class="btn btn-soft-success float-end" (click)="onAddClick()"> Add
+    </button>
+    <button class="btn btn-danger float-end mx-2" (click)="onDeleteClick()"> Cancel
+    </button>
+  </div>
+</div>

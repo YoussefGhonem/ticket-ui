@@ -1,0 +1,293 @@
+<app-breadcrumbs title="Users" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card" id="orderList">
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <div class="d-flex align-items-center">
+          <h5 class="card-title mb-0 flex-grow-1">Users</h5>
+          <div ngbDropdown style="margin: 5px;" *ngIf="showCreateDropdowne">
+            <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"
+              aria-expanded="false" ngbDropdownToggle>Add New
+            </button>
+            <ul class="dropdown-menu" ngbDropdownMenu>
+              <li
+                *ngIf="this.form.controls['role'].value == userRolesEnum.CommitteeMember || this.form.controls['role'].value == null">
+                <a class="dropdown-item cursor-pointer" (click)="create(userRolesEnum.CommitteeMember)"> Committee
+                  Member</a>
+              </li>
+              <li
+                *ngIf="this.form.controls['role'].value == userRolesEnum.VendorAdmin || this.form.controls['role'].value == null">
+                <a class="dropdown-item cursor-pointer" *ngIf="isCurrentUserVendor()"
+                  (click)="create(userRolesEnum.VendorAdmin)"> Vendor Admin</a>
+              </li>
+            </ul>
+          </div>
+          <button [disabled]="disabledExport || nav.activeId == 4" style="margin-left: 6px;" type="button"
+            class="btn btn-info" (click)="export()"> <i class="ri-file-excel-2-line align-bottom me-1"></i>
+            Export
+          </button>
+        </div>
+        <div class="card-body  border-end-0 border-start-0">
+          <div class="row" [formGroup]="form">
+            <div class="col-lg-7 col-sm-12">
+              <div class="search-box">
+                <input type="text" formControlName="searchWord" class="form-control "
+                  placeholder="Search by email, name or phone number" id="custom-control">
+                <i class="ri-search-line search-icon"></i>
+                <div class="search-button" (click)="toggleSearch()">
+                  <i *ngIf="!dropdownOpen" class="ri-equalizer-line custom-search-icon d-flex flex-row-reverse text-dark"><span
+                      style="padding-bottom: 2px; padding-right: 3px;font-family: sans-serif;font-size: medium;">Filters</span>
+                  </i>
+                  <i *ngIf="dropdownOpen" [ngbTooltip]="'Close'"
+                    class="ri-equalizer-line custom-search-icon d-flex flex-row-reverse text-dark"></i>
+                </div>
+
+                <i *ngIf="chowDeleteIcon()" (click)="clearSearchBar()"
+      class="ri-close-line custom-delete-search-icon d-flex flex-row-reverse"> </i>
+                <div class="search-button">
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-7 col-sm-12" [formGroup]="form">
+              <ul class="dropdown-list" aria-expanded="true" role="listbox" #toggle
+                [ngClass]="{'dropdown-open' : dropdownOpen}">
+                <div class="modal-body">
+                  <div class="row gy-4 mb-3">
+
+                    <div class="col-md-6 form-group">
+                      <label class="form-label">Status
+                      </label>
+                      <ng-select [clearable]="true" bindLabel="name" bindValue="id" id="eventTypeId"
+                        formControlName="isActive" placeholder="Select">
+                        <ng-option [value]="' '"> <b>All</b></ng-option>
+                        <ng-option [value]="true"> <b>Active</b></ng-option>
+                        <ng-option [value]="false"> <b>Inactive</b></ng-option>
+                      </ng-select>
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <label class="form-label" style="margin-bottom: 20px;">
+                      </label>
+                      <ng-select [clearable]="true" bindLabel="name" bindValue="id" id="eventTypeId"
+                        formControlName="isLock" placeholder="Select">
+                        <ng-option [value]="' '" selected> <b>All</b></ng-option>
+                        <ng-option [value]="true"> <b>Locked</b></ng-option>
+                        <ng-option [value]="false"> <b>UnLocked</b></ng-option>
+                      </ng-select>
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <label class="form-label">Created Date</label>
+                      <input class="form-control flatpickr-input" formControlName="createdDate" type="text" mwlFlatpickr
+                      [maxDate]="'today'" data-clear [altInput]="true" [convertModelValue]="true" placeholder="Select Created Date">
+                      <i *ngIf="form.get('createdDate').value !== null" (click)="clearDate()"
+                        class="ri-close-line custom-delete-date-icon d-flex flex-row-reverse"> </i>
+                    </div>
+                    <div class="text-end">
+                      <div class="d-flex gap-1 justify-content-end">
+                        <button type="button" class="btn btn-light w-sm" (click)="clear()">Clear
+                          Filter
+                        </button>
+                        <button type="button" (click)="search()" class="btn btn-success w-sm">Search</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body pt-0">
+        <div>
+          <ul ngbNav #nav="ngbNav" [activeId]="activeId" class="nav nav-tabs nav-tabs-custom nav-success mb-3">
+            <li [ngbNavItem]="1">
+              <a ngbNavLink (click)="onRoleChanges(null)">
+                <i class="ri-user-star-fill me-1 align-bottom"></i> All Users
+              </a>
+              <ng-template ngbNavContent *ngIf="nav.activeId == 1">
+                <ng-container [ngTemplateOutlet]="table">
+                </ng-container>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="3">
+              <a ngbNavLink (click)="onRoleChanges(userRolesEnum.VendorAdmin)">
+                <i class="ri-shield-user-fill me-1 align-bottom"></i> Vendor Admins
+              </a>
+              <ng-template ngbNavContent *ngIf="nav.activeId == 3">
+                <ng-container [ngTemplateOutlet]="table">
+                </ng-container>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="2">
+              <a ngbNavLink (click)="onRoleChanges(userRolesEnum.CommitteeMember)">
+                <i class="ri-user-settings-line me-1 align-bottom"></i> Committee Members
+              </a>
+              <ng-template ngbNavContent *ngIf="nav.activeId == 2">
+                <ng-container [ngTemplateOutlet]="table">
+                </ng-container>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="4">
+              <a ngbNavLink (click)="onRoleChanges(userRolesEnum.PublicUser)">
+                <i class="ri-user-star-fill me-1 align-bottom"></i> Customers
+              </a>
+              <ng-template ngbNavContent *ngIf="nav.activeId == 4">
+                <ng-container [ngTemplateOutlet]="table">
+                </ng-container>
+              </ng-template>
+            </li>
+
+          </ul>
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #table let-item="item">
+  <div class="card-body pt-0 mt-3">
+    <p-table [value]="tableService.data$ | async" [totalRecords]="tableService.total$ | async"
+      (onLazyLoad)="tableService.onLazyLoad($event)" [columns]="tableService.selectedColumns"
+      [lazy]="tableService.options.lazy" [rows]="tableService.options.rows" [paginator]="tableService.options.paginator"
+      [showCurrentPageReport]="tableService.options.showCurrentPageReport"
+      [responsiveLayout]="tableService.options.responsiveLayout"
+      [currentPageReportTemplate]="tableService.options.currentPageReportTemplate"
+      [rowsPerPageOptions]="tableService.options.rowsPerPageOptions" [styleClass]="tableService.options.styleClass">
+
+      <ng-template pTemplate="caption">
+        <table-header-select class="custom-header" [columns]="columns" [selectedColumns]="tableService.selectedColumns"
+          (onChanges)="tableService.selectedColumns = $event">
+        </table-header-select>
+      </ng-template>
+
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <ng-container *ngFor="let col of columns">
+            <th class="custom-col" [pSortableColumn]="col.field" *ngIf="col.allowSorting">
+              {{col.title}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+            <th class="custom-col" *ngIf="!col.allowSorting">
+              {{col.title}}
+            </th>
+          </ng-container>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-row let-columns="columns">
+        <tr>
+          <td *ngFor="let col of columns">
+            <table-column *ngIf="col.type !== 'custom'" [dataItem]="row" [option]="col"></table-column>
+
+            <ng-container *ngIf="col.type === 'custom'">
+              <div *ngIf="col.field === 'name'">
+                <!-- <img [src]="row.imageUrl | secure | async" alt="" class="mr-75 rounded-circle" default-image height="40"
+                  width="40">
+
+                <div class="d-inline-block">
+                  <span>{{item?.name | truncate : 15 :'...'}}</span>
+                  <br>
+                  <span class="text-muted">{{item?.email | truncate : 15 :'...'}}</span>
+                </div> -->
+
+                <app-user-info [userData]="row" [displayImage]="true"></app-user-info>
+
+
+              </div>
+              <ng-container *ngIf="col.field === 'actions'" [ngTemplateOutletContext]="{item:row}" container="body"
+                [ngTemplateOutlet]="actions">
+              </ng-container>
+
+              <!-- Locked -->
+              <div *ngIf="col.field === 'isLocked'" class="d-flex gap-2 align-items-center text-center">
+                <i *ngIf="!row.isLocked" class="ri-lock-unlock-line text-success text-center"></i>
+                <i *ngIf="row.isLocked" class="ri-lock-line text-danger text-center "></i>
+              </div>
+              <!-- role -->
+              <ng-container *ngIf="col.field === 'role'" [ngTemplateOutletContext]="{item:row}" container="body"
+                [ngTemplateOutlet]="role">
+              </ng-container>
+              <!-- isActive -->
+              <span *ngIf="col.field === 'isActive'" activeStatusBadge [value]="row?.isActive"></span>
+            </ng-container>
+
+          </td>
+        </tr>
+      </ng-template>
+
+    </p-table>
+  </div>
+</ng-template>
+
+
+<ng-template #actions let-item="item">
+  <div class="dropdown ml-2" ngbDropdown>
+    <a class="text-muted arrow-none" href="javascript:void(0);" data-bs-toggle="dropdown" style="margin-left: 22px;"
+      aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+      <i class="ri-more-fill"></i>
+    </a>
+
+    <div class="dropdown-menu dropdown-menu" ngbDropdownMenu style="transform: translate(-202px, 15.2222px);">
+      <a class="dropdown-item cursor-pointer" (click)="openOrderSlider(filterContent, item)">
+        <i class="ri-eye-line text-primary align-bottom"></i> Preview</a>
+
+      <a class="dropdown-item cursor-pointer" (click)="activate(item)"
+        *ngIf="hasAllowedAction(item, memberAllowedActions.Activate)"><i
+          class="ri-check-double-fill text-success align-bottom"></i> Activate</a>
+
+      
+
+      <a class="dropdown-item cursor-pointer" (click)="changeMemberRole(item,memberAllowedActions.UpgradeToAdmin)"
+        *ngIf="hasAllowedAction(item, memberAllowedActions.UpgradeToAdmin)"><i
+          class="ri-arrow-up-fill text-primary align-bottom"></i> Upgrade </a>
+
+      <a class="dropdown-item cursor-pointer" (click)="changeMemberRole(item,memberAllowedActions.DowngradeToMember)"
+        *ngIf="hasAllowedAction(item, memberAllowedActions.DowngradeToMember)"><i
+          class="ri-arrow-down-fill text-warning align-bottom"></i> Downgrade </a>
+
+          <a class="dropdown-item cursor-pointer" (click)="deactivate(item)"
+          *ngIf="hasAllowedAction(item, memberAllowedActions.Deactivate)"><i
+            class="ri-close-circle-line text-muted align-bottom"></i> Deactivate </a>
+
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #role let-item="item">
+  {{item.role | humanize}}
+</ng-template>
+
+<ng-template #emptyTemp>
+  <div class="tab-pane" id="productnav-draft" role="tabpanel">
+    <div class="py-4 text-center">
+      <div>
+        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+          colors="primary:#405189,secondary:#0ab39c" style="width:72px;height:72px">
+        </lord-icon>
+      </div>
+      <div class="mt-4">
+        <h5>Sorry! No Result Found</h5>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #filterContent let-offcanvas>
+  <div class="d-flex align-items-center bg-light bg-gradient p-3 offcanvas-header">
+    <h5 class="m-0 me-2 text-dark"><b>{{previewUser?.name}}</b></h5>
+    <button type="button" class="btn-close btn-close-dark ms-auto " data-bs-dismiss="offcanvas" aria-label="Close"
+      (click)="offcanvas.dismiss('Cross click')"></button>
+  </div>
+  <div class="offcanvas-body p-0">
+    <preview-slider style="width: 30%;" [user]="previewUser"
+      (loadMembersEvent)="updateUser();offcanvas.dismiss('Cross click');"></preview-slider>
+  </div>
+</ng-template>

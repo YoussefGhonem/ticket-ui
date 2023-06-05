@@ -1,0 +1,56 @@
+<div class="row mb-3">
+  <div class="col-md">
+    <div class="row align-items-center g-3">
+      <div class="col-md-auto">
+        <div>
+          <div class="bg-white">
+            <img [src]="eventBasicInfo?.coverImageUrl | secure | async" default-image class="rounded bg-image"
+              alt="200x200" width="115" height="56">
+          </div>
+        </div>
+      </div>
+      <div class="col-md">
+        <div>
+          <h4 class="fw-bold" [ngbTooltip]="eventBasicInfo?.name">{{eventBasicInfo?.name | truncate : 30:'..'}}
+            <ng-container *ngIf="hasAllowedAction( allowedActions.Edit)">
+              <button [ngbTooltip]="'Edit'" *ngIf="!editMode" class="btn btn-sm" style="padding: 0;"
+                (click)="onEditClick()">
+                <i class=" ri-edit-2-fill text-info fs-17"></i></button>
+            </ng-container>
+          </h4>
+          <div class="hstack gap-3 flex-wrap">
+            <div [ngbTooltip]="eventBasicInfo?.typeName"> {{eventBasicInfo?.typeName | truncate : 30:'..'}}</div>
+            <div class="vr"></div>
+            <div>From : <span class="fw-medium">{{eventBasicInfo?.startDate | datetime}}</span></div>
+            <div class="vr"></div>
+            <div>To: <span class="fw-medium">{{eventBasicInfo?.endDate | datetime}}</span></div>
+            <div class="vr"></div>
+            <div [eventStatusBadge]="eventStatus[eventBasicInfo?.status]">{{eventStatus[eventBasicInfo?.status]}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-auto">
+    <div class="hstack gap-2 flex-wrap">
+      <button *ngIf="hasAllowedAction(allowedActions.Published)" (click)="publish()" type="button"
+        class="btn btn-success btn-label waves-effect right waves-light rounded-pill"><i
+          class="ri-share-forward-2-fill label-icon align-middle rounded-pill fs-16 ms-2"></i> Publish</button>
+
+      <button *ngIf="hasAllowedAction( allowedActions.Delete)" (click)="remove()" type="button"
+        class="btn btn-danger btn-label waves-effect right waves-light rounded-pill"><i
+          class="ri-delete-bin-fill label-icon align-middle rounded-pill fs-16 ms-2"></i> Remove</button>
+
+      <button *ngIf="hasAllowedAction( allowedActions.Canceled)" (click)="cancel()" type="button"
+        class="btn btn-danger btn-label waves-effect right waves-light rounded-pill"><i
+          class="ri-close-circle-fill label-icon align-middle rounded-pill fs-16 ms-2"></i> Cancel</button>
+
+      <button *ngIf="hasAllowedAction(allowedActions.Postpone)" (click)="postpone()" type="button"
+        class="btn w-sm btn-danger btn-label waves-effect left waves-light rounded-pill"><i
+          class="ri-calendar-2-line label-icon align-middle  fs-16 ms-2"></i> Postpone</button>
+    </div>
+  </div>
+
+
+</div>

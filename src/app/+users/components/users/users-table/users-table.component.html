@@ -1,0 +1,123 @@
+<div class="card-body pt-0 mt-3" *ngIf="tableService.dataList?.length > 0;else emptyTemp">
+  <p-table [value]="tableService.data$ | async" [totalRecords]="tableService.total$ | async"
+    (onLazyLoad)="tableService.onLazyLoad($event)" [columns]="tableService.selectedColumns"
+    [lazy]="tableService.options.lazy" [rows]="tableService.options.rows" [paginator]="tableService.options.paginator"
+    [showCurrentPageReport]="tableService.options.showCurrentPageReport"
+    [responsiveLayout]="tableService.options.responsiveLayout"
+    [currentPageReportTemplate]="tableService.options.currentPageReportTemplate"
+    [rowsPerPageOptions]="tableService.options.rowsPerPageOptions" [styleClass]="tableService.options.styleClass">
+
+    <ng-template pTemplate="caption">
+      <table-header-select class="custom-header" [columns]="columns" [selectedColumns]="tableService.selectedColumns"
+        (onChanges)="tableService.selectedColumns = $event">
+      </table-header-select>
+    </ng-template>
+
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <ng-container *ngFor="let col of columns">
+          <th class="custom-col" [pSortableColumn]="col.field" *ngIf="col.allowSorting">
+            {{col.title}}
+            <p-sortIcon [field]="col.field"></p-sortIcon>
+          </th>
+          <th class="custom-col" *ngIf="!col.allowSorting">
+            {{col.title}}
+          </th>
+        </ng-container>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row let-columns="columns">
+      <tr>
+        <td *ngFor="let col of columns">
+          <table-column *ngIf="col.type !== 'custom'" [dataItem]="row" [option]="col"></table-column>
+
+          <ng-container *ngIf="col.type === 'custom'">
+            <!-- user info -->
+            <div *ngIf="col.field === 'name'" class="d-flex gap-2 align-items-center">
+              <app-user-info [userData]="row" [displayImage]="false"></app-user-info>
+            </div>
+            <!-- role -->
+            <div *ngIf="col.field === 'role'" class="d-flex gap-2 align-items-center">
+              <i class="ri-user-line me-1 align-bottom text-primary"></i>{{ row.role | humanize }}
+            </div>
+            <!-- created Date -->
+            <div *ngIf="col.field === 'createdDate'" class="d-flex gap-2 align-items-center">
+              {{row.createdDate | date}}
+            </div>
+            <!-- Locked -->
+            <div *ngIf="col.field === 'isLocked'" class="d-flex gap-2 align-items-center text-center">
+              <i *ngIf="!row.isLocked" class="ri-lock-unlock-line text-success text-center"></i>
+              <i *ngIf="row.isLocked" class="ri-lock-line text-danger text-center"></i>
+            </div>
+
+            <!-- actions -->
+            <ng-container *ngIf="col.field === 'actions'" [ngTemplateOutletContext]="{item:row}" container="body"
+              [ngTemplateOutlet]="actions">
+            </ng-container>
+
+            <span *ngIf="col.field === 'isActive'" activeStatusBadge [value]="row?.isActive"></span>
+
+          </ng-container>
+
+        </td>
+      </tr>
+    </ng-template>
+
+  </p-table>
+</div>
+
+<ng-template #actions let-item="item">
+  <div class="dropdown ml-2" ngbDropdown>
+    <a class="text-muted arrow-none" href="javascript:void(0);" data-bs-toggle="dropdown" style="margin-left: 22px;"
+      aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+      <i class="ri-more-fill"></i>
+    </a>
+    <div class="dropdown-menu dropdown-menu" ngbDropdownMenu style="transform: translate(-202px, 15.2222px);">
+
+      <a class="dropdown-item cursor-pointer" data-bs-toggle="offcanvas" data-bs-target="#theme-settings-offcanvas"
+      aria-controls="theme-settings-offcanvas" (click)="openOrderSlider(filtetcontent, item)"><i class="ri-eye-line text-primary align-bottom"></i> Preview</a>
+
+      <a class="dropdown-item cursor-pointer" (click)="activate(item)"
+        *ngIf="hasAllowedAction(item, allowedActions.Activate)"><i
+          class="ri-check-double-fill text-success align-bottom"></i> Activate</a>
+
+          <a class="dropdown-item cursor-pointer" (click)="unlock(item)"
+          *ngIf="hasAllowedAction(item, allowedActions.Unlock)"> <i
+            class="ri-lock-unlock-line text-primary align-bottom"></i> Unlock </a>
+
+      <a class="dropdown-item cursor-pointer" (click)="deactivate(item)"
+        *ngIf="hasAllowedAction(item, allowedActions.Deactivate)"> <i
+          class="ri-close-circle-line text-muted align-bottom"></i> Deactivate </a>
+      <div *ngIf="hasAllowedAction(item, allowedActions.Unlock)" class="dropdown-divider"></div>
+
+      
+    </div>
+  </div>
+</ng-template>
+<ng-template #emptyTemp>
+  <div class="tab-pane" id="productnav-draft" role="tabpanel">
+    <div class="py-4 text-center">
+      <div>
+        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+          colors="primary:#405189,secondary:#0ab39c" style="width:72px;height:72px">
+        </lord-icon>
+      </div>
+      <div class="mt-4">
+        <h5>Sorry! No Result Found</h5>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #filtetcontent let-offcanvas>
+  <div class="d-flex align-items-center bg-light bg-gradient p-3 offcanvas-header">
+      <h5 class="m-0 me-2 text-dark"><b>{{previewUser?.name}}</b></h5>
+      <button type="button" class="btn-close btn-close-dark ms-auto " data-bs-dismiss="offcanvas" aria-label="Close"
+          (click)="offcanvas.dismiss('Cross click')"></button>
+  </div>
+  <div class="offcanvas-body p-0">
+      <preview-slider [user]="previewUser" (loadUsersEvent)="updateUser();offcanvas.dismiss('Cross click')"></preview-slider>
+  </div>
+</ng-template>

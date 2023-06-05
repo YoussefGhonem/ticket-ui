@@ -1,0 +1,95 @@
+<form [formGroup]="updateUserInfoForm" (submit)="onUserInfoSubmit()">
+
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="form-group mb-3">
+        <label for="firstName" class="form-label" [redStar]="updateUserInfoForm.get('firstName')">First Name</label>
+        <input type="text" type="text" [formControlValidator]="updateUserInfoForm.get('firstName')" class="form-control"
+          formControlName="firstName" id="firstName" placeholder="Enter your first name">
+        <arv-validation-messages for="firstName"></arv-validation-messages>
+      </div>
+    </div>
+    <!--end col-->
+    <div class="col-lg-6">
+      <div class="mb-3 form-group">
+        <label for="lastnameInput" class="form-label" [redStar]="updateUserInfoForm.get('lastName')">Last Name</label>
+        <input type="text" class="form-control" formControlName="lastName"
+          [formControlValidator]="updateUserInfoForm.get('lastName')" id="lastnameInput"
+          placeholder="Enter your last name" value="Adame">
+        <arv-validation-messages for="lastName"></arv-validation-messages>
+      </div>
+    </div>
+    <!--end col-->
+    <div class="col-lg-6">
+      <div class="form-group mb-3">
+        <label class="form-label" [redStar]="updateUserInfoForm.get('phoneNumber')">Phone Number</label>
+        <div class="input-group">
+          <ng-select id="callingCode" aria-label-text="callingCode" [items]="countries" bindLabel="name"
+            bindValue="callingCode" id="callingCode" formControlName="callingCode"
+            [formControlValidator]="updateUserInfoForm.get('callingCode')">
+            <ng-template ng-label-tmp let-item="item" let-clear="clear">
+              <img class="rounded" height="15" width="15" [src]="item.flag" />
+              <b>{{' (+' + item.callingCode + ')'}}</b>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-index="index">
+              <img class="rounded-circle" height="15" width="15" [src]="item.flag" />
+              <b>{{' (+' + item.callingCode + ')'}}</b>
+            </ng-template>
+          </ng-select>
+          <input aria-label="phoneNumber" type="text" id="phoneNumber" class="form-control"
+            placeholder="Enter Phone Number" formControlName="phoneNumber" mask="0000999999"
+            [formControlValidator]="updateUserInfoForm.get('phoneNumber')" />
+        </div>
+        <arv-validation-messages for="callingCode"></arv-validation-messages>
+        <arv-validation-messages for="phoneNumber"> </arv-validation-messages>
+
+      </div>
+      <!--end col-->
+    </div>
+
+    <div class="col-lg-6">
+      <div class="mb-3">
+        <label for="emailInput" class="form-label" [redStar]="updateUserInfoForm.get('firstName')">Email</label>
+        <input type="text" class="form-control" [formControlValidator]="updateUserInfoForm.get('email')"
+          [value]="currentUserEmail" id="emailInput" disabled>
+      </div>
+    </div>
+
+    <ng-container formGroupName="address">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="form-group ">
+                <label for="locationDescription" class="form-label">Address</label>
+                <textarea class="form-control" id="locationDescription" formControlName="locationDescription"
+                rows="3"></textarea>
+            </div>
+
+            <div class="mt-3" style="position: relative;">
+                <form [formGroup]="mapForm" style="position: absolute; width: 50%; top: 12%; left: 25%; z-index: 100;">
+                <input
+                 class="form-control mx-2" placeholder="Search location" formControlName="input" ngx-google-places-autocomplete
+                  #placesRef="ngx-places" (onAddressChange)="handleAddressChange($event)" />
+                </form>
+                <!-- Google Maps-->
+                <agm-map class="mx-2" [zoom]="14" [latitude]="lat" [longitude]="lng">
+                  <agm-marker [latitude]="lat" [longitude]="lng" [markerDraggable]="true"></agm-marker>
+                </agm-map>
+              </div>
+        </div>
+        </div>
+    </ng-container>
+    <!--end col-->
+
+    <div class="col-lg-12">
+      <div class="hstack gap-2 justify-content-end mt-3">
+        <button routerLink="/users/profile" type="button" class="btn btn-light">Cancel
+        </button>
+        <button type="submit"
+          [disabled]="updateUserInfoForm.invalid || !updateUserInfoForm.dirty || updateUserInfoForm.pristine"
+          class="btn btn-success">Save</button>
+      </div>
+    </div>
+    <!--end col-->
+  </div>
+  <!--end row-->
+</form>

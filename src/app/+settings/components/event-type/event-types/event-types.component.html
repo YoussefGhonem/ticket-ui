@@ -1,0 +1,154 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Event Types" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card" id="orderList">
+      <div class="card-header  border-0">
+        <div class="d-flex align-items-center">
+          <h5 class="card-title mb-0 flex-grow-1">Event Types</h5>
+          <div class="flex-shrink-0 hstack gap-2">
+            <button type="button" (click)="add($event)" class="btn btn-success add-btn" data-bs-toggle="modal"
+              id="create-btn" data-bs-target="#showModal"><i class="ri-add-line align-bottom me-1"></i>
+              Create
+            </button>
+            <button [disabled]="disabledExport" style="margin-left: 6px;" type="button" class="btn btn-info"
+              (click)="export()"> <i class="ri-file-excel-2-line align-bottom me-1"></i>
+              Export
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <form [formGroup]="form">
+          <div class="row g-3">
+            <div class="col-xxl-5 col-sm-6">
+              <div class="search-box">
+                <input type="text" class="form-control" formControlName="name" placeholder="Search by name">
+                <i class="ri-search-line search-icon"></i>
+                <div class="search-button">
+
+                  <i *ngIf="showDeleteIcon()" (click)="clearSearchBar()"
+                    class="ri-close-line custom-delete-search-icon d-flex flex-row-reverse"> </i>
+                </div>
+              </div>
+            </div>
+            <div class="col-xxl-2 col-sm-4">
+              <div>
+                <ng-select [clearable]="true" bindLabel="name" bindValue="id" name="choices-single-default" id="idStatus"
+                      formControlName="isActive" placeholder="Status">
+                      <ng-option [value]="''"> <b>All</b></ng-option>
+                      <ng-option [value]="true"> <b>Active</b></ng-option>
+                      <ng-option [value]="false"> <b>Inactive</b></ng-option>
+                    </ng-select>
+
+              </div>
+            </div>
+          </div>
+        </form>
+        <!--end row-->
+
+      </div>
+      <div class="card-body pt-0 mt-3">
+
+        <p-table [value]="tableService.data$ | async" [totalRecords]="tableService.total$ | async"
+          (onLazyLoad)="tableService.onLazyLoad($event)" [columns]="tableService.selectedColumns"
+          [lazy]="tableService.options.lazy" [rows]="tableService.options.rows"
+          [paginator]="tableService.options.paginator"
+          [showCurrentPageReport]="tableService.options.showCurrentPageReport"
+          [responsiveLayout]="tableService.options.responsiveLayout"
+          [currentPageReportTemplate]="tableService.options.currentPageReportTemplate"
+          [rowsPerPageOptions]="tableService.options.rowsPerPageOptions" [styleClass]="tableService.options.styleClass">
+
+          <ng-template pTemplate="caption">
+            <table-header-select class="custom-header" [columns]="columns"
+              [selectedColumns]="tableService.selectedColumns" (onChanges)="tableService.selectedColumns = $event">
+            </table-header-select>
+          </ng-template>
+
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <ng-container *ngFor="let col of columns">
+                <th class="custom-col" [pSortableColumn]="col.field" *ngIf="col.allowSorting">
+                  {{col.title}}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+                <th class="custom-col" *ngIf="!col.allowSorting">
+                  {{col.title}}
+                </th>
+              </ng-container>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-row let-columns="columns">
+            <tr>
+              <td *ngFor="let col of columns">
+                <table-column *ngIf="col.type !== 'custom'" [dataItem]="row" [option]="col"></table-column>
+
+                <ng-container *ngIf="col.type === 'custom'">
+
+                  <ng-container *ngIf="col.field === 'actions'" [ngTemplateOutletContext]="{item:row}" container="body"
+                    [ngTemplateOutlet]="actions">
+                  </ng-container>
+
+                  <span *ngIf="col.field === 'isActive'" activeStatusBadge [value]="row?.isActive"></span>
+
+                </ng-container>
+
+              </td>
+            </tr>
+          </ng-template>
+
+        </p-table>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<ng-template #actions let-item="item">
+  <div class="dropdown ml-2" ngbDropdown>
+    <a class="text-muted arrow-none" href="javascript:void(0);" data-bs-toggle="dropdown" style="margin-left: 22px;"
+      aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+      <i class="ri-more-fill"></i>
+    </a>
+
+    <div class="dropdown-menu dropdown-menu" ngbDropdownMenu style="transform: translate(-202px, 15.2222px);">
+
+      <a class="dropdown-item cursor-pointer" (click)="openOrderSlider(filtetcontent, item)"
+        *ngIf="hasAllowedAction(item, allowedAction.Preview)"><i class=" ri-eye-fill text-primary align-bottom"></i>
+        Preview</a>
+
+      <a class="dropdown-item cursor-pointer" (click)="edit(item)" *ngIf="hasAllowedAction(item, allowedAction.Edit)"><i
+          class=" ri-edit-2-fill text-primary align-bottom"></i> Edit</a>
+
+      <a class="dropdown-item cursor-pointer" (click)="activate(item)"
+        *ngIf="hasAllowedAction(item, allowedAction.Activate)"><i
+          class="ri-check-double-fill text-success align-bottom"></i> Activate</a>
+
+      <a class="dropdown-item cursor-pointer" (click)="deactivate(item)"
+        *ngIf="hasAllowedAction(item, allowedAction.Deactivate)"><i
+          class="ri-close-circle-line text-muted align-bottom"></i> Deactivate </a>
+
+      <div *ngIf="hasAllowedAction(item, allowedAction.Delete)" class="dropdown-divider"></div>
+      <a class="dropdown-item cursor-pointer" (click)="delete(item)"
+        *ngIf="hasAllowedAction(item, allowedAction.Delete)"><i
+          class=" ri-delete-bin-fill text-danger align-bottom"></i> Remove </a>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #filtetcontent let-offcanvas>
+  <div class="d-flex align-items-center bg-light bg-gradient p-3 offcanvas-header">
+    <h5 class="m-0 me-2 text-dark">{{previewEventType?.name}}</h5>
+    <button type="button" class="btn-close btn-close-dark ms-auto " data-bs-dismiss="offcanvas" aria-label="Close"
+      (click)="offcanvas.dismiss('Cross click')"></button>
+  </div>
+  <div class="offcanvas-body p-0">
+    <slider [eventType]="previewEventType" (loadEventTypes)="afterAction($event, offcanvas)"></slider>
+  </div>
+</ng-template>

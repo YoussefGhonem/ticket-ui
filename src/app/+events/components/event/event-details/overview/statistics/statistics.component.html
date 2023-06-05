@@ -1,0 +1,108 @@
+<div class="row">
+    <div class="col">
+        <div class="card card-animate" style="height: 125px !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Profits</p>
+                    </div>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title fs-3 bg-soft-success" style="border-radius: 2.25rem !important;">
+                            <i class="bx bx-dollar-circle text-success"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between ">
+                    <div>
+                        <h4 class="fs-22 fw-semibold ff-secondary">
+                            {{statistics?.profits |decimal}}
+                        </h4>
+                        <p class="fw-small text-muted ">
+                            For Vendor {{statistics?.vendorProfit | priceWithSgin}} ,
+                            For Admin {{statistics?.adminProfit|priceWithSgin}}</p>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card card-animate" style="height: 125px;">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Ticket Purchased</p>
+                    </div>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title fs-3 bg-soft-warning" style="border-radius: 2.25rem !important;">
+                            <i class="bx bx-dollar-circle text-warning"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-1">
+                    <div>
+                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                            {{statistics?.ticketPurchased |integer}}
+
+                        </h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card card-animate" style="height: 125px;">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Orders</p>
+                    </div>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title fs-3 "
+                            style="background-color:  rgb(199 77 175 / 18%);border-radius: 2.25rem !important;">
+                            <i class="bx bx-dollar-circle" style="color: #9747ff;"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-1">
+                    <div>
+                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                            {{statistics?.orders|integer}}
+
+                        </h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card card-animate" style="height: 125px;">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Requests</p>
+
+                    </div>
+                    <div class="avatar-sm flex-shrink-0">
+
+                        <span class="avatar-title  fs-3 bg-soft-primary" style="border-radius: 2.25rem !important;">
+                            <i class="bx bx-dollar-circle text-primary"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-1">
+                    <div>
+                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                            {{statistics?.requests|integer}}
+
+                        </h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

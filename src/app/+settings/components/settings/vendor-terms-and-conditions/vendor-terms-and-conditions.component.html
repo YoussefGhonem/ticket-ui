@@ -1,0 +1,18 @@
+<div class="card">
+  <div class="card-body">
+    <form [formGroup]="vendorTermsForm" (submit)="onVendorSubmit()">
+      <div class="mb-3 form-group">
+        <label class="form-label text-dark" for="vendorTermsAndConditions"
+          [redStar]="vendorTermsForm.get('vendorTermsAndConditions')">Vendor's Terms And Conditions</label>
+        <ckeditor [editor]="VendorEditor" [config]="editorConfig"
+          [formControlValidator]="vendorTermsForm.get('vendorTermsAndConditions')" id="vendorTermsAndConditions"
+          formControlName="vendorTermsAndConditions" data="">
+        </ckeditor>
+        <arv-validation-messages for="vendorTermsAndConditions"></arv-validation-messages>
+      </div>
+      <div class="text-end mb-3">
+        <button [disabled]="vendorTermsForm.invalid" type="submit" class="btn btn-success w-sm">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,152 @@
+<div class="card " id="orderList">
+  <div class="card-body pt-0 mt-3">
+    <requests-filter (loadRequests)="loadRequests($event)" [checkedRows]="checkedRows" [form]="form" (reject)="reject($event)" (initCheckedRows)="initCheckedRows()"
+      (approve)="approve($event)" (export)="export($event)"></requests-filter>
+
+    <div class="mt-4">
+      <p-table [value]="tableService.data$ | async" [totalRecords]="tableService.total$ | async"
+        (onLazyLoad)="tableService.onLazyLoad($event)" [columns]="tableService.selectedColumns"
+        [lazy]="tableService.options.lazy" [rows]="tableService.options.rows"
+        [paginator]="tableService.options.paginator"
+        [showCurrentPageReport]="tableService.options.showCurrentPageReport"
+        [responsiveLayout]="tableService.options.responsiveLayout"
+        [currentPageReportTemplate]="tableService.options.currentPageReportTemplate"
+        [rowsPerPageOptions]="tableService.options.rowsPerPageOptions" [styleClass]="tableService.options.styleClass">
+
+        <ng-template pTemplate="caption">
+          <table-header-select class="custom-header" [columns]="columns"
+            [selectedColumns]="tableService.selectedColumns" (onChanges)="fire($event)">
+          </table-header-select>
+        </ng-template>
+
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <ng-container *ngFor="let col of columns">
+              <th style="width: 5% !important;" class="custom-col" *ngIf="col.title == 'Select'">
+                <input class="form-check-input mt-2 mt-sm-0" type="checkbox"
+                    name="checkAll" (change)="selectAll($event)">
+                </th>
+              <th style="width: 10% !important;" class="custom-col" [pSortableColumn]="col.field" *ngIf="col.allowSorting && col.title != 'Select'">
+                {{col.title}}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+              </th>
+              <th style="width: 10% !important;" class="custom-col" *ngIf="!col.allowSorting && col.title != 'Select'">
+                {{col.title}}
+              </th>
+            </ng-container>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row let-columns="columns" let-rowData>
+          <tr>
+            <td *ngFor="let col of columns">
+              <table-column *ngIf="col.type !== 'custom'" [dataItem]="row" [option]="col"></table-column>
+
+              <ng-container *ngIf="col.type === 'custom'">
+                <!-- check box -->
+                <div
+                  *ngIf="col.field === 'checkBox' && eventHasAllowedAction(eventAllowedActions.EditWhenDraftOrPublished) && row?.status == 1"
+                  class="d-flex gap-2 align-items-center">
+
+                  <input [checked]="patchChecked(rowData)" class="form-check-input mt-2 mt-sm-0" type="checkbox"
+                    name="checkAll" value="{{rowData.id}}" (change)="onCheckBoxChange(rowData, $event)">
+                </div>
+                <!-- user info -->
+                <div *ngIf="col.field === 'name'" class="d-flex gap-2 align-items-center">
+                  <div class="d-flex">
+                    <img [src]="row.createdBy?.imageUrl | secure | async" alt="" class="mr-75 rounded-circle mx-3"
+                      default-image height="40" width="40">
+
+                    <div class="d-inline-block">
+                      <span [ngbTooltip]="row.createdBy?.name">{{row.createdBy?.name | truncate : 10
+                        :'...'}}</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- created Date -->
+                <div *ngIf="col.field === 'status'" class="d-flex gap-2 align-items-center">
+                  <span *ngIf="row.status == 2" class="text-success"> <i
+                      class=" ri-checkbox-circle-line align-bottom"></i> {{requestStatus[row.status]}}<br> <span *ngIf="row?.remainingTickets != 0" style="font-size: 13px !important;" class="text-muted"> Exp: {{row?.actionTakenDate | addDays:eventBasicInfo?.days | addHours:eventBasicInfo?.hours}}</span></span>
+                      
+                  <span *ngIf="row.status == 3" class="text-danger"> <i class="ri-close-circle-line align-bottom"></i>
+                    {{requestStatus[row.status]}}</span>
+                  <span *ngIf="row.status == 1" class="text-warning"> <i
+                      class=" ri-checkbox-circle-line align-bottom"></i> {{requestStatus[row.status]}}</span>
+                      <span *ngIf="row.status == 4" class="text-secondary"> <i
+                        class="ri-close-circle-line align-bottom"></i> {{requestStatus[row.status]}} <br> <span style="font-size: 13px !important;" class="text-muted"> Exp: {{row?.actionTakenDate | addDays:eventBasicInfo?.days | addHours:eventBasicInfo?.hours}}</span></span>
+                        <span *ngIf="row.status == 5" class="text-danger"> <i
+                          class="ri-close-circle-line align-bottom"></i> {{requestStatus[row.status]}}</span>
+                </div>
+                <!-- actions -->
+                <ng-container *ngIf="col.field === 'actions'" [ngTemplateOutletContext]="{item:row}" container="body"
+                  [ngTemplateOutlet]="actions">
+                </ng-container>
+                <span *ngIf="col.field === 'isActive'" activeStatusBadge [value]="row?.isActive"></span>
+
+              </ng-container>
+
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #emptyTemp>
+  <div class="tab-pane" id="productnav-draft" role="tabpanel">
+    <div class="py-4 text-center">
+      <div>
+        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+          colors="primary:#405189,secondary:#0ab39c" style="width:72px;height:72px">
+        </lord-icon>
+      </div>
+      <div class="mt-4">
+        <h5>Sorry! No Result Found</h5>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #actions let-item="item">
+  <ng-container *ngxPermissionsOnly="[vendorAdminRole, vendorRole, committeeMemberRole, localAdminRole, superAdminRole]">
+    <ng-container>
+      <div class="dropdown" ngbDropdown>
+        <button class="btn btn-link text-muted mt-n2  text-decoration-none fs-15 arrow-none" data-bs-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="true" ngbDropdownToggle>
+          <i-feather name="more-horizontal" class="icon-sm"></i-feather>
+        </button>
+
+        <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+          <a class="dropdown-item cursor-pointer" (click)="openOrderSlider(filtetcontent, item)">
+            <i class="ri-eye-line text-primary align-bottom"></i> Preview</a>
+          <a class="dropdown-item text-success" href="javascript:void(0);" data-bs-toggle="modal"
+            *ngIf="eventHasAllowedAction(eventAllowedActions.EditWhenPublished) && requestAllowedAction(item, requestAllowedActions.Approve)" (click)="approve([item])"
+            data-bs-target="#removeProjectModal"><i class="ri-checkbox-circle-line align-bottom"></i>
+            Approve </a>
+          <a class="dropdown-item text-danger" href="javascript:void(0);" data-bs-toggle="modal"
+            *ngIf="eventHasAllowedAction(eventAllowedActions.EditWhenPublished) && requestAllowedAction(item, requestAllowedActions.Reject)" (click)="reject([item])"
+            data-bs-target="#removeProjectModal"><i class="ri-close-circle-line align-bottom"></i>
+            Reject </a>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-template>
+
+
+
+
+<ng-template #filtetcontent let-offcanvas>
+  <div class="d-flex align-items-center bg-light bg-gradient p-3 offcanvas-header">
+    <h5 class="m-0 me-2 text-dark">{{chosenRequest?.reference}}</h5>
+    <button type="button" class="btn-close btn-close-dark ms-auto " data-bs-dismiss="offcanvas" aria-label="Close"
+      (click)="offcanvas.dismiss('Cross click')"></button>
+  </div>
+  <div class="offcanvas-body p-0">
+    <order-slider [request]="chosenRequest" (reject)="reject($event, offcanvas);" (approve)="approve($event, offcanvas);"></order-slider>
+  </div>
+</ng-template>

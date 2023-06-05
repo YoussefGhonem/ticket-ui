@@ -1,0 +1,74 @@
+<section>
+    <div class="modal-content">
+      <div *ngIf="!goNormal" class="modal-header">
+        <h5 class="m-0 me-2 text-dark">Approve</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn-close"
+          (click)="modalService.close()"></button>
+      </div>
+      <div class="modal-body">
+  
+        <ng-container *ngIf="!goNormal">
+          <ng-container *ngTemplateOutlet="approveRequestTemp"></ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="goNormal">
+        <ng-container *ngTemplateOutlet="approveRequestTempSuccess"></ng-container>
+        </ng-container>
+  
+        <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+          <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal" (click)="modalService.close()">Cancel
+          </button>
+          <button *ngIf="goNormal" type="button" class="btn w-sm btn-success" id="delete-product" (click)="Approve()">Approve
+          </button>
+          <button *ngIf="!goNormal" type="button" class="btn w-sm btn-success" id="delete-product" (click)="getDetails(4)">Change
+        </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  
+  
+  <ng-template #approveRequestTemp>
+    <div class="mt-2 text-center">
+      <!-- Info Alert -->
+      <div class="alert alert-info alert-top-border alert-dismissible fade show" role="alert">
+        <i class="ri-information-line me-3 align-middle fs-16 text-info"></i>
+        This request requires a change in the quantity you set for each ticket type and max capacity limit per ticket.
+        Please click <b>Change</b> to redirect to ticket page.
+      </div>
+    </div>
+  
+    <table class="table text-start">
+        <thead style="height: 27px !important;">
+            <th scope="col">Ticket Type</th>
+            <th scope="col">Requested</th>
+            <th scope="col">Available</th>
+            <th scope="col">Total Approved</th>
+            <th scope="col">Extra Quantity</th>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let item of ticketTypes; let i=index;">
+                <th scope="row" [ngbTooltip]="item.title">{{item.title | truncate : 15}}</th>
+                <th>{{item.requested}}</th>
+                <th>{{item.availableTickets}}</th>
+                <th>{{item.approvedTickets}}<br>
+                  <span class="text-muted fs-11" style="font-weight: 400;">Purshased({{item?.purchasedTickets}}), Remaining({{item?.approvedTickets - item?.purchasedTickets}})</span>
+                </th>
+                <th>{{item.extra > 0 ? item.extra : '-'}}</th>
+            </tr>
+        </tbody>
+    </table>
+  
+  </ng-template>
+
+  <ng-template #approveRequestTempSuccess>
+    <div class="text-center">
+      <i style="font-size: 115px;" class="ri-information-line me-3 align-middle text-danger"></i>
+    <div class="pt-2 fs-15 ">
+      <h4>Are you sure you want to approve {{requests?.length > 1 ? 'these requests' : 'this request'}}?</h4>
+    </div>
+    </div>
+  </ng-template>
+  

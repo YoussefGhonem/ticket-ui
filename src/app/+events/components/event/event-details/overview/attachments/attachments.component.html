@@ -1,0 +1,67 @@
+<div class="card" style="margin-bottom: 0.75rem;">
+  <div class="card-body">
+    <div class="d-flex align-items-center mb-2">
+      <h5 class="card-title flex-grow-1"><b>Attachments</b></h5>
+      <ng-container *ngIf="eventHasAllowedAction( allowedActions.Edit)">
+        <button type="button" *ngIf="hasPermission()" class="btn btn-soft-success btn-sm" (click)="onClickUpload()">
+          <i class="ri-upload-2-fill me-1 align-bottom"></i> Upload
+        </button>
+      </ng-container>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="vstack gap-2">
+          <ngx-simplebar style="max-height: 200px;" class="px-3">
+            <div class="border rounded border-dashed p-2 my-1" *ngFor="let item of attachments; let i = index;">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0 me-3 cursor-pointer" (click)="viewFile(item)">
+                  <div class="avatar-sm">
+                    <div class="avatar-title bg-light text-secondary rounded fs-24">
+                      <ng-container *ngIf="item.type == fileTypeEnum.Image">
+                        <i class="ri-image-line" *ngIf="!item.url"></i>
+                        <img [src]="item.url | secure | async" *ngIf="item.url" default-image alt="img" />
+                      </ng-container>
+
+                      <ng-container *ngIf="item.type == fileTypeEnum.Video">
+                        <i class="ri-video-line"></i>
+                      </ng-container>
+
+                      <ng-container *ngIf="item.type == fileTypeEnum.Audio">
+                        <i class="ri-music-2-fill"></i>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex-grow-1 overflow-hidden">
+                  <h5 class="fs-13 mb-1"><a href="javascript: void(0);" (click)="viewFile(item)"
+                      class="text-truncate d-block">{{item.name}}</a></h5>
+                  <div>{{item.size | formatFileSize}}</div>
+                </div>
+                <div class="flex-shrink-0 ms-2">
+                  <div class="d-flex gap-1">
+                    <button type="button" class="btn btn-icon text-muted btn-sm fs-18"
+                      *ngIf="hasAllowedAction(item, eventAttachmentAllowedActions.Download)" (click)="download(i)">
+                      <i class="ri-download-2-line"></i></button>
+                    <div class="dropdown" ngbDropdown *ngIf="hasAllowedAction(item, eventAttachmentAllowedActions.Delete) &&
+                       eventHasAllowedAction(allowedActions.Edit)">
+                      <button class="btn btn-icon text-muted btn-sm fs-18 dropdown arrow-none" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
+                        <i class="ri-more-fill"></i>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                        <li><a class="dropdown-item" href="javascript: void(0);" (click)="deleteAttachment(item)"><i
+                              class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                            Remove</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ngx-simplebar>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div>
+  <img *ngIf="displayImage" [src]="userInfo?.imageUrl | secure | async" alt="" class="mr-75 rounded-circle"
+    default-image height="40" width="40">
+
+  <div class="d-inline-block">
+    <span *ngIf="userInfo?.name?.length <= 40" [ngbTooltip]="userInfo?.name">{{userInfo?.name | truncate : 15
+      :'...'}}</span>
+    <span *ngIf="userInfo?.name?.length > 40" [ngbTooltip]="userInfo?.name">{{userInfo?.name | truncate : 15
+      :'...'}}</span>
+    <br>
+    <span class="text-muted" [ngbTooltip]="userInfo?.email">{{userInfo?.email | truncate : 10 :'...'}}</span>
+  </div>
+</div>

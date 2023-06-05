@@ -1,0 +1,11 @@
+<members-tab-filters [hasMembers] = "members?.length > 0" [user] = "vendorId" (notify)="loadCommitteeMembers()" [form] = "form" ></members-tab-filters>
+
+<members-tab-table [form]="form" [user] = "vendorId"></members-tab-table>
+
+
+
+<div style="margin-bottom: 1%" *ngIf="members?.length > 0">
+    <app-pagination (pageChange)="pageChange($event)" [pageNumber]="form.getRawValue().pageNumber"
+      [pageSize]="form.getRawValue().pageSize" [total]="total">
+    </app-pagination>
+  </div>

@@ -1,0 +1,12 @@
+<div class="profile-timeline order-status">
+    <ngb-accordion #acc="ngbAccordion" activeIds="0" [closeOthers]="true">
+        <ngb-panel *ngFor="let item of eventActivities; let i = index" id="{{i}}" [disabled]="isExpandable(item) == false">
+            <ng-template ngbPanelTitle>
+                <activity-item-title [activity]="item"></activity-item-title>
+            </ng-template>
+            <ng-template ngbPanelContent>
+                <activity-item-content [activity]="item"></activity-item-content>
+            </ng-template>
+        </ngb-panel>
+    </ngb-accordion>
+</div>

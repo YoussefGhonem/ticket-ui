@@ -1,0 +1,68 @@
+<div class="card">
+    <div class="card-header " [formGroup]="form">
+        <div class="d-flex justify-content-between">
+            <div>
+                <div class="d-flex justify-content-start">
+                    <h4 class="m-auto">Profits </h4>
+                    <div class="dropdown card-header-dropdown" ngbDropdown style="margin-left: 2%;">
+                        <ng-select [items]="vendors" bindLabel="name" bindValue="id" formControlName="vendorId"
+                            placeholder="All Vendors &nbsp; &nbsp; &nbsp; &nbsp; ">
+                            <ng-template ng-option-tmp let-item="item" let-index="index">
+                                <b>{{item.name}} &nbsp; &nbsp;</b>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                    <div class="dropdown card-header-dropdown" ngbDropdown style="margin-left: 2%;margin-right: 2%;">
+                        <ng-select [disabled]="this.form?.controls['vendorId']?.value == null" [items]="events"
+                            bindLabel="name" bindValue="id" formControlName="eventId"
+                            placeholder="All Events &nbsp; &nbsp; &nbsp; &nbsp;">
+                            <ng-template ng-option-tmp let-item="item" let-index="index">
+                                <b>{{item.name}} &nbsp; &nbsp; </b>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                    <div class="dropdown card-header-dropdown" ngbDropdown>
+                        <ng-select [disabled]="true" [items]="ticketTypes" bindLabel="title" bindValue="id"
+                            formControlName="ticketTypeId" placeholder="All Ticket Types &nbsp; &nbsp; &nbsp; &nbsp; ">
+                            <ng-template ng-option-tmp let-item="item" let-index="index">
+                                <b>{{item.title}} &nbsp; &nbsp;</b>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+            <div></div>
+            <div>
+                <div class="border-0 align-items-center d-flex">
+                    <div class="d-flex gap-1">
+
+                        <button title="Weekly" (click)="onFrequencyChange(frequencyEnum.Week)" type="button"
+                            class="btn btn-soft-success btn-sm">
+                            W
+                        </button>
+                        <button title="Monthly" (click)="onFrequencyChange(frequencyEnum.Month)" type="button"
+                            class="btn btn-soft-success btn-sm">
+                            M
+                        </button>
+                        <button title="Quarter" (click)="onFrequencyChange(frequencyEnum.Quarter)" type="button"
+                            class="btn btn-soft-success btn-sm">
+                            Q
+                        </button>
+                        <div class="select-dropdown">
+                            <select formControlName="year">
+                                <option selected hidden [value]="null">Y</option>
+                                <option *ngFor="let item of years" value="{{item}}">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body" *ngIf="isShow">
+        <apx-chart [series]="splineAreaChart.series" [chart]="splineAreaChart.chart" [xaxis]="splineAreaChart.xaxis"
+            [stroke]="splineAreaChart.stroke" [tooltip]="splineAreaChart.tooltip"
+            [dataLabels]="splineAreaChart.dataLabels" [colors]="splineAreaChart.colors"></apx-chart>
+    </div>
+</div>

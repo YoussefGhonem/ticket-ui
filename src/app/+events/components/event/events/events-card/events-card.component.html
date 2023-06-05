@@ -1,0 +1,152 @@
+<div class="row mt-3" *ngIf="events?.length > 0; else emptyTemp">
+  <div class="col-lg-3 col-md-6 col-sm-12 project-card" *ngFor="let data of events" id="pl1_{{data.id}}">
+    <div class="card" style="min-height:456px;">
+      <div class="card-body">
+        <div class="pt-3 mt-n3 mx-n3  bg-soft-{{getBackGroundColor(data.status)}} rounded-top">
+          <div class="d-flex justify-content-between my-n2">
+            <p class="pt-2 cursor-pointer" style="margin-left: 21px;" [ngbTooltip]="'Created'"><span class="text-info ">
+                <i class="ri-calendar-2-line align-bottom cursor-pointer"></i> {{data.createdDate |
+                datetime}}</span> , by
+              {{data.createdBy.name |
+              humanize}}</p>
+
+            <button type="button" class="btn avatar-xs p-0 favourite-btn heart_icon_{{data.id}}"
+              [ngClass]="{'active': true}">
+            </button>
+            <div class="dropdown" ngbDropdown>
+              <button class="btn btn-link text-muted mt-n2  text-decoration-none fs-15 arrow-none"
+                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ngbDropdownToggle>
+                <i-feather name="more-horizontal" class="icon-sm"></i-feather>
+              </button>
+
+              <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                <a class="dropdown-item" (click)="getDetails(data.id)"><i
+                    class="ri-eye-fill align-bottom ri-md p-1 text-primary"></i> Details</a>
+                <a *ngIf="hasAllowedAction(data, allowedActions.Published)" (click)="publish(data)"
+                  class="dropdown-item cursor-pointer"><i
+                    class="ri-share-forward-2-fill align-bottom p-1 text-success"></i>
+                  Publish</a>
+                <div
+                  *ngIf="hasAllowedAction(data, allowedActions.Delete) || hasAllowedAction(data, allowedActions.Canceled)"
+                  class="dropdown-divider"></div>
+
+                <a *ngIf="hasAllowedAction(data, allowedActions.Delete)" (click)="remove(data)" class="dropdown-item"
+                  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#removeProjectModal"><i
+                    class="ri-delete-bin-fill align-bottom ri-md p-1 text-danger"></i> Remove</a>
+
+                <a class="dropdown-item cursor-pointer" (click)="cancel(data)"
+                  *ngIf="hasAllowedAction(data, allowedActions.Canceled)"><i
+                    class=" ri-delete-back-2-fill  align-bottom ri-md p-1 text-danger"></i> Cancel</a>
+
+              </div>
+            </div>
+
+          </div>
+          <div class="text-center cursor-pointer" (click)="getDetails(data.id)">
+            <img *ngIf="data?.coverImageUrl != null" [src]="data?.coverImageUrl | secure | async" default-image alt=""
+              class="custom-image">
+
+            <img [ngbTooltip]="'Not Found Cover Image'" *ngIf="data?.coverImageUrl == null"
+              src="https://i.ibb.co/2h4FcdF/no-product.png" default-image alt="" class="custom-image">
+          </div>
+        </div>
+
+        <div class="py-3" style="min-height: 233px;">
+          <h5 class="fs-14 mb-3 text-hover" [ngbTooltip]="data.name" container="body"><a
+            (click)="getDetails(data.id)" class="text-dark text-hover">{{data.name | truncate
+              :30:'...'}}
+            </a>
+            <div class="mt-1">
+              {{data?.reference}}
+            </div>
+          </h5>
+
+          <div class="row gy-3">
+            <div class="col-6">
+              <div>
+                <p class="text-muted mb-1">Type</p>
+                <h5 class="fs-14" container="body" ngbTooltip="{{data.typeName}}">{{data.typeName | truncate :11:'...'}}
+                </h5>
+              </div>
+            </div>
+            <div class="col-6">
+              <div>
+                <p class="text-muted mb-1">Status</p>
+                <div class="custom-status-color" *ngIf="data?.status == eventStatusEnum.Draft"
+                  [eventStatusBadge]="data?.status"></div>
+
+                <div *ngIf="data?.status != eventStatusEnum.Draft" [eventStatusBadge]="data?.status">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row gy-3">
+            <div class="col-6">
+              <div>
+                <p class="text-muted mb-1">From</p>
+                <h5 class="fs-13">{{data?.startDate |datetime}}</h5>
+              </div>
+            </div>
+            <div class="col-6">
+              <div>
+                <p class="text-muted mb-1">To</p>
+                <h5 class="fs-13">{{data?.endDate | datetime}}</h5>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-center mt-3">
+            <p class="text-muted mb-0 me-2">Members:</p>
+            <div class="avatar-group">
+              <div class="avatar-group-item" *ngFor="let user of data.members">
+                <a href="javascript: void(0);" class="d-block" ngbTooltip="{{user.name}}" placement="top">
+                  <img [src]="user?.imageUrl | secure | async" default-image alt="" class="rounded-circle avatar-xxs">
+                </a>
+
+              </div>
+            </div>
+            <a *ngIf="data.members.length==0" href="javascript: void(0);" class="d-block"
+              [ngbTooltip]="'No Members Assgined'" placement="top">
+              -
+            </a>
+          </div>
+        </div>
+        <div>
+          <div class="mt-auto">
+            <div class="d-flex mb-2">
+              <div class="flex-grow-1">
+                <div>Purchased Tickets</div>
+              </div>
+              <div class="flex-shrink-0">
+                <div><i class="ri-list-check align-bottom me-1 text-muted"></i>{{data.purchasedTickits
+                  ||
+                  0}}/{{data.totalTickets || '-'}}
+                </div>
+              </div>
+            </div>
+            <div class="progress-sm animated-progess">
+              <ngb-progressbar [value]="(data.purchasedTickits/data.totalTickets) * 100" type="success" class="progress-sm">
+              </ngb-progressbar>
+            </div><!-- /.progress -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #emptyTemp>
+  <div class="tab-pane" id="productnav-draft" role="tabpanel">
+    <div class="py-4 text-center">
+      <div>
+        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+          colors="primary:#405189,secondary:#0ab39c" style="width:72px;height:72px">
+        </lord-icon>
+      </div>
+      <div class="mt-4">
+        <h5>Sorry! No Result Found</h5>
+      </div>
+    </div>
+  </div>
+</ng-template>

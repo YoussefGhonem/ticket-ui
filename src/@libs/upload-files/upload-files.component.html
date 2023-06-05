@@ -1,0 +1,39 @@
+<div class="dropzone" DropZone (onFileDropped)="droppedFiles($event)">
+  <label for="files" class="dropzone-container">
+    <div class="file-icon">+</div>
+    <div class="dropzone-title">
+      Drag and drop your files or <span class='browse'>browse</span> your files
+    </div>
+  </label>
+  <input #files id="files" name="files[]" type="file" class="file-input" multiple
+         (change)="droppedFiles(getFilesFromEvent($event));resetInput();"
+         [accept]="allowedExtensions"
+  />
+</div>
+
+<div class="card-body files-list">
+  <div class="vstack gap-2">
+    <div class="border rounded border-dashed p-2" *ngFor="let file of allFiles; let i = index">
+      <div class="d-flex align-items-center">
+        <div class="flex-shrink-0 me-3">
+          <div class="avatar-sm">
+            <div class="avatar-title bg-light rounded fs-24">
+              <i [class]="getFileIcon(file)"></i>
+            </div>
+          </div>
+        </div>
+        <div class="flex-grow-1 overflow-hidden">
+          <h5 class="fs-13 mb-1"><a href="javascript:void(0);" class="text-body text-truncate d-block">{{file.name}}</a>
+          </h5>
+          <div>{{file.size | formatFileSize}}</div>
+        </div>
+        <div class="flex-shrink-0 ms-2">
+          <div class="d-flex gap-1">
+            <button type="button" class="btn btn-icon text-muted btn-sm fs-18" (click)="removeFile(i)"><i
+                    class="ri-delete-bin-line text-danger"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

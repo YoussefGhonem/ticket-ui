@@ -1,0 +1,52 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Settings" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+<div class="row">
+  <div class="col-lg-12">
+    <div>
+      <!-- Nav tabs -->
+      <ul ngbNav #nav="ngbNav" [activeId]="1" class="nav nav-tabs nav-tabs-custom nav-success mb-3">
+        <li [ngbNavItem]="1">
+          <a ngbNavLink class="fs-15">
+            <i class=" ri-settings-4-line me-1 align-buttom"></i> Configurations
+          </a>
+          <ng-template ngbNavContent>
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <configuration-update [settings]="settings" (loadSettings)="getSettings()"></configuration-update>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <app-verification-file [settings]="settings" (loadSettings)="getSettings()"></app-verification-file>
+              </div>
+            </div>
+
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="2">
+          <a ngbNavLink class="fs-15">
+            <i class=" ri-account-box-line me-1 align-bottom"></i> Terms and Conditions(Vendors)
+          </a>
+          <ng-template ngbNavContent>
+            <vendors-terms-and-conditions [settings]="settings"
+              (loadSettings)="getSettings()"></vendors-terms-and-conditions>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="3">
+          <a ngbNavLink class="fs-15">
+            <i class="ri-account-box-fill me-1 align-bottom"></i> Terms and Conditions(Customers)
+          </a>
+          <ng-template ngbNavContent>
+            <app-user-terms-and-conditions [settings]="settings"
+              (loadSettings)="getSettings()"></app-user-terms-and-conditions>
+          </ng-template>
+        </li>
+      </ul>
+
+      <!-- Tab panes -->
+      <div class="tab-content text-muted">
+        <div [ngbNavOutlet]="nav"></div>
+      </div>
+    </div>
+  </div>
+  <!--end row-->
+</div>

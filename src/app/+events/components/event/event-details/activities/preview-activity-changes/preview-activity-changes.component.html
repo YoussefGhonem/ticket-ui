@@ -1,0 +1,15 @@
+<!-- Order Create Model -->
+<ng-container #content role="document">
+    <div class="modal-header bg-light p-3">
+        <h5 class="modal-title" id="addModal"> {{property}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+            (click)="modalService.close()"></button>
+    </div>
+
+    <ngx-simplebar style="max-height: 350px;" class="px-3">
+
+        <div class="row to-full mt-1 px-2 py-1" [innerHtml]="value" style="min-height: 350px;">
+        </div>
+    </ngx-simplebar>
+</ng-container>
+<!--End Modal -->

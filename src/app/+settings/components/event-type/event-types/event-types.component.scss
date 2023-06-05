@@ -1,0 +1,15 @@
+::ng-deep .offcanvas.offcanvas-end {
+    width: 40% !important;
+}
+
+.custom-delete-search-icon {
+    font-size: 10px;
+    position: absolute;
+    font-size: inherit;
+    right: 25px !important;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: #878a99;
+}

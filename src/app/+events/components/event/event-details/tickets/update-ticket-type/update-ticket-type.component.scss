@@ -1,0 +1,18 @@
+#sign {
+    position: absolute;
+    right: -6px;
+    top: 36px;
+    font-size: 16px;
+  }
+
+  .email-list{
+    max-height: 50px;
+  }
+
+  .d-flex{
+    width: 100% !important;
+  }
+
+  ::ng-deep .accordion-button::after{
+    display: none !important;
+  }

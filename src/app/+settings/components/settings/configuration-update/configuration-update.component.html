@@ -1,0 +1,31 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title mb-0 fs-14" [redStar]="ticketFeesForm.get('ticketFees')">Owner's ticket fees percentage</h5>
+  </div>
+  <div class="card-body">
+    <div>
+      <form [formGroup]="ticketFeesForm" (submit)="onSubmit()">
+
+        <div class="mb-3 form-group">
+          <!-- Info Alert -->
+          <div class="alert alert-info alert-top-border alert-dismissible fade show" role="alert">
+            <i class="ri-information-line me-3 align-middle fs-16 text-info"></i>
+            This Percentage Sets The Fees Returned To Super Admin Per Ticket
+          </div>
+
+          <div class="input-group">
+            <input class="form-control" id="updatedFees" placeholder="xx.xx"
+              [formControlValidator]="ticketFeesForm.get('ticketFees')"
+              aria-label="amount (with dot and two decimal places)" formControlName="ticketFees" suffix=" %"
+              type="text" />
+            <span class="input-group-text">%</span>
+          </div>
+          <arv-validation-messages for="ticketFees"></arv-validation-messages>
+        </div>
+        <div class="text-end mb-3">
+          <button [disabled]="ticketFeesForm.invalid" type="submit" class="btn btn-success w-sm">Save </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
